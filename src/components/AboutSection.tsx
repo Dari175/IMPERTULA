@@ -1,4 +1,4 @@
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "./ui/data-dispaly/cardGlobal/card";
 import { Shield, Users, Award, Settings } from "lucide-react";
 import impertulaBuildingImage from "../images/About_us.png";
 import { motion } from "framer-motion";
@@ -21,7 +21,7 @@ export function AboutSection() {
               Somos <strong>IMPERTULA</strong>, una empresa especializada en impermeabilización y distribución 
               de aditivos para la construcción. Con más de 15 años de experiencia en el mercado, 
               nos hemos consolidado como distribuidores autorizados de las prestigiosas marcas 
-              <strong className="text-primary"> Fester</strong> y <strong className="text-primary">Heckel</strong>.
+              <strong className="text-primary"> Fester</strong> y <strong className="text-primary">Henckel</strong>.
             </p>
             <p className="text-muted-foreground mb-8">
               Nuestra misión es ofrecer soluciones integrales de impermeabilización que garanticen 

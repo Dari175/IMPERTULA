@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "./ui/controls/button";
 import { Menu, Phone, Mail } from "lucide-react";
 
 interface HeaderProps {

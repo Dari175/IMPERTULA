@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
+import { Button } from "./ui/controls/button";
+import { Card, CardContent } from "./ui/data-dispaly/cardGlobal/card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/data-dispaly/carousel";
 import { ArrowRight, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import completedRoofImage from "../images/product5.png";
