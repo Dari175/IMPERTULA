@@ -3,11 +3,6 @@ import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ArrowLeft, MapPin, Calendar, CheckCircle, Users, Ruler, Clock, Award } from "lucide-react";
 import { motion } from "framer-motion";
-import workImage1 from "figma:asset/fa650a6a0a18dba261a5cee34d00a7146e2a0b4f.png";
-import workImage2 from "figma:asset/d0e23da5a30072fe88b0db84b52cea260b878bc6.png";
-import workImage3 from "figma:asset/2264f64b61e205723c7629af47513d9f5d16d709.png";
-import cfeRoofImage from "figma:asset/aeb1d84d9aee52d03e808aedad395a193003542b.png";
-import industrialWorkImage from "figma:asset/a52275f45d573bf57d26bfc9847afc77771e9298.png";
 
 interface ProjectDetailProps {
   projectId: number;
@@ -21,7 +16,7 @@ const projects = [
     location: "Estado de México",
     date: "2024",
     description: "Impermeabilización completa de azotea en instalaciones de la Comisión Federal de Electricidad con sistema de alta durabilidad.",
-    image: cfeRoofImage,
+    image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
     category: "Industrial",
     status: "Completado",
     fullDescription: "Proyecto de impermeabilización integral en instalaciones críticas de la CFE. Se implementó un sistema multicapa de alta resistencia diseñado para soportar condiciones extremas y garantizar protección a largo plazo de equipos eléctricos sensibles.",
@@ -55,7 +50,7 @@ const projects = [
     location: "Monterrey, NL",
     date: "2024",
     description: "Aplicación de impermeabilización en proceso con equipo especializado y productos Fester de alta calidad.",
-    image: industrialWorkImage,
+    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
     category: "Industrial",
     status: "En Proceso",
     fullDescription: "Proyecto de gran escala en complejo industrial manufacturero. Impermeabilización de naves industriales, oficinas administrativas y áreas de almacenamiento con sistemas especializados para cada zona según su uso y requerimientos.",
@@ -89,7 +84,7 @@ const projects = [
     location: "Estado de México",
     date: "2024",
     description: "Proyecto de impermeabilización en nave industrial con sistema completo de protección.",
-    image: workImage1,
+    image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
     category: "Industrial",
     status: "Completado",
     fullDescription: "Impermeabilización completa de nave industrial de almacenamiento con requisitos especiales de protección contra humedad para productos sensibles. Sistema de alta eficiencia energética con propiedades reflectivas.",
@@ -123,7 +118,7 @@ const projects = [
     location: "Guadalajara, JAL",
     date: "2023",
     description: "Impermeabilización integral en desarrollo residencial con productos Fester de alta resistencia.",
-    image: workImage2,
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
     category: "Residencial",
     status: "Completado",
     fullDescription: "Proyecto residencial de 120 viviendas con impermeabilización completa de azoteas, terrazas y áreas comunes. Implementación de sistema estético y funcional con garantía extendida para tranquilidad de los propietarios.",
@@ -157,7 +152,7 @@ const projects = [
     location: "Guadalajara, JAL",
     date: "2023",
     description: "Aplicación de impermeabilización en desarrollo habitacional con productos Fester de alta calidad.",
-    image: workImage3,
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
     category: "Residencial",
     status: "Completado",
     fullDescription: "Desarrollo residencial de lujo con amenidades premium. Impermeabilización de áreas habitacionales, albercas, fuentes decorativas, estacionamientos en azotea y jardines en altura con sistemas especializados para cada aplicación.",
@@ -243,6 +238,9 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                 src={project.image}
                 alt={project.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1590736969955-71cc94901144?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
@@ -421,4 +419,4 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
       </div>
     </motion.div>
   );
-}
+} 

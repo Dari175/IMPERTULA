@@ -10,6 +10,7 @@ import { Footer } from "./components/Footer";
 import { ProductDetail } from "./components/ProductDetail";
 import { ProjectDetail } from "./components/ProjectDetail";
 import { motion, AnimatePresence } from "framer-motion";
+import './global.css' // ← Asegúrate de que esta línea exista
 
 type View = "home" | "product-detail" | "project-detail";
 

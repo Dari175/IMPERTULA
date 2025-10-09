@@ -1,6 +1,6 @@
 import { Card, CardContent } from "./ui/card";
 import { Shield, Users, Award, Settings } from "lucide-react";
-import impertulaBuildingImage from "figma:asset/b070b976acd62b3e563da7aed3e9b4f26177de0f.png";
+import impertulaBuildingImage from "../images/About_us.png";
 import { motion } from "framer-motion";
 
 export function AboutSection() {

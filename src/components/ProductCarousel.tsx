@@ -2,10 +2,8 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 import { ArrowRight, Star } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import roofWorkImage from "figma:asset/1deb37062b69e44607b54f2a9292b72aac8f0a10.png";
-import completedRoofImage from "figma:asset/fc529b788e8e1e5ce2c57d2e9a34f5765dba7146.png";
 import { motion } from "framer-motion";
+import completedRoofImage from "../images/product5.png";
 
 const products = [
   {
@@ -87,66 +85,61 @@ export function ProductCarousel({ onProductClick }: ProductCarouselProps) {
             <CarouselContent className="-ml-2 md:-ml-4">
               {products.map((product) => (
                 <CarouselItem key={product.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                <Card className="h-full">
-                  <div className="relative">
-                    {product.image.startsWith('http') ? (
-                      <ImageWithFallback
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-48 object-cover rounded-t-lg"
-                      />
-                    ) : (
+                  <Card className="h-full">
+                    <div className="relative">
                       <img
                         src={product.image}
                         alt={product.name}
                         className="w-full h-48 object-cover rounded-t-lg"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1590736969955-71cc94901144?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800';
+                        }}
                       />
-                    )}
-                    <div className="absolute top-4 left-4">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        product.brand === 'Fester' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
-                      }`}>
-                        {product.brand}
-                      </span>
-                    </div>
-                    <div className="absolute top-4 right-4 bg-white/90 px-2 py-1 rounded">
-                      <span className="text-sm text-muted-foreground">{product.category}</span>
-                    </div>
-                  </div>
-                  
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">{product.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4">{product.description}</p>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < product.rating
-                                ? 'text-yellow-400 fill-current'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        ))}
+                      <div className="absolute top-4 left-4">
+                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                          product.brand === 'Fester' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+                        }`}>
+                          {product.brand}
+                        </span>
                       </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => onProductClick?.(product.id)}
-                      >
-                        Ver Detalles
-                      </Button>
+                      <div className="absolute top-4 right-4 bg-white/90 px-2 py-1 rounded">
+                        <span className="text-sm text-muted-foreground">{product.category}</span>
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+                    
+                    <CardContent className="p-6">
+                      <h3 className="font-semibold mb-2">{product.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-4">{product.description}</p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-4 w-4 ${
+                                i < product.rating
+                                  ? 'text-yellow-400 fill-current'
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => onProductClick?.(product.id)}
+                        >
+                          Ver Detalles
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </motion.div>
         
         <motion.div 

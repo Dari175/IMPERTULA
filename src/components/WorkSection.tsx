@@ -4,11 +4,11 @@ import { Badge } from "./ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { ArrowRight, MapPin, Calendar, CheckCircle } from "lucide-react";
-import workImage1 from "figma:asset/fa650a6a0a18dba261a5cee34d00a7146e2a0b4f.png";
-import workImage2 from "figma:asset/d0e23da5a30072fe88b0db84b52cea260b878bc6.png";
-import workImage3 from "figma:asset/2264f64b61e205723c7629af47513d9f5d16d709.png";
-import cfeRoofImage from "figma:asset/aeb1d84d9aee52d03e808aedad395a193003542b.png";
-import industrialWorkImage from "figma:asset/a52275f45d573bf57d26bfc9847afc77771e9298.png";
+import workImage1 from "../images/workImage1.png";
+import workImage2 from "../images/workImage2.png";
+import workImage3 from "../images/hero-background.png";
+import cfeRoofImage from "../images/cfeRoofImage.png";
+import industrialWorkImage from "../images/industrialWorkImage.png";
 import { motion } from "framer-motion";
 
 const projects = [

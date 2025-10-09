@@ -2,10 +2,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ArrowLeft, Star, Package, Shield, Droplets, Clock, CheckCircle2 } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { motion } from "framer-motion";
-import roofWorkImage from "figma:asset/1deb37062b69e44607b54f2a9292b72aac8f0a10.png";
-import completedRoofImage from "figma:asset/fc529b788e8e1e5ce2c57d2e9a34f5765dba7146.png";
 
 interface ProductDetailProps {
   productId: number;
@@ -138,7 +135,7 @@ const products = [
     name: "Sistema Impermeabilizante Completo",
     category: "Sistema",
     description: "Solución integral de impermeabilización para proyectos comerciales",
-    image: completedRoofImage,
+    image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
     brand: "Fester",
     rating: 5,
     fullDescription: "Sistema completo de impermeabilización que incluye primer, membrana impermeabilizante y acabado protector. Diseñado para proyectos comerciales e industriales que requieren máxima confiabilidad.",
@@ -216,19 +213,14 @@ export function ProductDetail({ productId, onBack }: ProductDetailProps) {
             transition={{ delay: 0.3 }}
           >
             <Card className="overflow-hidden">
-              {product.image.startsWith('http') ? (
-                <ImageWithFallback
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-96 object-cover"
-                />
-              ) : (
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-96 object-cover"
-                />
-              )}
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-96 object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1590736969955-71cc94901144?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800';
+                }}
+              />
             </Card>
           </motion.div>
 
