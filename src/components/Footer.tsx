@@ -89,7 +89,7 @@ export function Footer() {
             Distribuidor autorizado de <span className="font-semibold text-blue-400">FESTER</span> y <span className="font-semibold text-green-400">HECKEL</span>
           </p>
           <p className="mt-1 text-gray-500">
-            Las marcas Fester y Heckel son propiedad de sus respectivos fabricantes
+            Las marcas Fester y Henckel son propiedad de sus respectivos fabricantes
           </p>
         </div>
       </div>
