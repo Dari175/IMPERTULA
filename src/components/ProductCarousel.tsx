@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
+import { Button } from "./ui/controls/button";
+import { Card, CardContent } from "./ui/data-dispaly/cardGlobal/card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/data-dispaly/carousel";
 import { ArrowRight, Star } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import roofWorkImage from "figma:asset/1deb37062b69e44607b54f2a9292b72aac8f0a10.png";

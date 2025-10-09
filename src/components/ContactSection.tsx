@@ -1,8 +1,8 @@
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Label } from "./ui/label";
+import { Button } from "./ui/controls/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/data-dispaly/cardGlobal/card";
+import { Input } from "./ui/forms/input";
+import { Textarea } from "./ui/forms/textarea";
+import { Label } from "./ui/forms/label";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { motion } from "framer-motion";
 

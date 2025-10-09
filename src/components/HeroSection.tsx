@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "./ui/controls/button";
 import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 import heroImage from "figma:asset/2264f64b61e205723c7629af47513d9f5d16d709.png";
 import { motion } from "framer-motion";

@@ -1,8 +1,8 @@
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
-import { AspectRatio } from "./ui/aspect-ratio";
+import { Button } from "./ui/controls/button";
+import { Card, CardContent } from "./ui/data-dispaly/cardGlobal/card";
+import { Badge } from "./ui/data-dispaly/badge";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/data-dispaly/carousel";
+import { AspectRatio } from "./ui/utils/aspect-ratio";
 import { ArrowRight, MapPin, Calendar, CheckCircle } from "lucide-react";
 import workImage1 from "figma:asset/fa650a6a0a18dba261a5cee34d00a7146e2a0b4f.png";
 import workImage2 from "figma:asset/d0e23da5a30072fe88b0db84b52cea260b878bc6.png";

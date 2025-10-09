@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
+import { Button } from "./ui/controls/button";
+import { Card, CardContent } from "./ui/data-dispaly/cardGlobal/card";
+import { Badge } from "./ui/data-dispaly/badge";
 import { ArrowLeft, MapPin, Calendar, CheckCircle, Users, Ruler, Clock, Award } from "lucide-react";
 import { motion } from "framer-motion";
 import workImage1 from "figma:asset/fa650a6a0a18dba261a5cee34d00a7146e2a0b4f.png";
