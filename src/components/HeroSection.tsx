@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "./ui/controls/button";
 import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import heroImage from "../images/hero-background.png";

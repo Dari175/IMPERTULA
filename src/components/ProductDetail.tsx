@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
+import { Button } from "./ui/controls/button";
+import { Card, CardContent } from "./ui/data-dispaly/cardGlobal/card";
+import { Badge } from "./ui/data-dispaly/badge";
 import { ArrowLeft, Star, Package, Shield, Droplets, Clock, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 

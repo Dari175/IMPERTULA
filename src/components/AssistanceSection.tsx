@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/data-dispaly/cardGlobal/card";
+import { Button } from "./ui/controls/button";
+import { Badge } from "./ui/data-dispaly/badge";
 import { 
   Users, 
   FileText, 
