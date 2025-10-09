@@ -1,46 +1,121 @@
-# Getting Started with Create React App
+# 🌐 Impertula
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Impertula** es un sitio web profesional desarrollado con **React**, diseñado para mantener la presencia digital de la empresa en el mercado de manera más formal, moderna y funcional.
+El objetivo principal es ofrecer una experiencia web elegante, rápida y adaptable a cualquier dispositivo.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Características principales
 
-### `npm start`
+* Interfaz moderna y responsiva (React + TailwindCSS o CSS Modules)
+* Navegación fluida con React Router
+* Animaciones suaves (transiciones o loader inicial animado)
+* Código modular y limpio para futuras integraciones (backend o CMS)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🛠️ Tecnologías utilizadas
 
-### `npm test`
+* **React 18+**
+* **Vite** o **Create React App** (según configuración)
+* **JavaScript (ES6+)**
+* **TailwindCSS / CSS Modules**
+* **Framer Motion** *(opcional para animaciones formales)*
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ⚙️ Instalación y ejecución local
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Clona el repositorio:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+git clone https://github.com/tu-usuario/impertula.git
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Accede al directorio del proyecto:
 
-### `npm run eject`
+```bash
+cd impertula
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Instala las dependencias:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Ejecuta el servidor de desarrollo:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+npm run dev
+```
 
-## Learn More
+El proyecto estará disponible en:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+http://localhost:5173/
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+## 📁 Estructura básica del proyecto
+
+```
+impertula/
+├── public/
+├── src/
+│   ├── assets/          # Imágenes, íconos, animaciones
+│   ├── components/      # Componentes reutilizables (Header, Footer, etc.)
+│   ├── pages/           # Páginas principales del sitio
+│   ├── styles/          # Archivos de estilos globales
+│   ├── App.jsx
+│   └── main.jsx
+├── package.json
+└── README.md
+```
+
+---
+
+## 🎨 Animación inicial sugerida
+
+Se recomienda incluir un loader elegante al inicio de la app, por ejemplo:
+
+```jsx
+import { motion } from "framer-motion";
+
+function Loader() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1, rotate: 360 }}
+      transition={{ duration: 1.5, repeat: Infinity }}
+      className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mt-40"
+    />
+  );
+}
+
+export default Loader;
+```
+
+Esto aporta una presentación más formal y profesional cuando el sitio carga.
+
+---
+
+## 📌 Próximos pasos
+
+* Integrar backend o API para contenido dinámico
+* Agregar SEO y analítica
+* Implementar modo oscuro y versión multilenguaje
+* Optimizar para despliegue en producción (Vercel / Netlify)
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la licencia **MIT**.
+Puedes usarlo y modificarlo libremente para tus fines personales o empresariales.
+
+---
+
+👨‍💻 *Desarrollado por Arturo Darinel Lopez Castillo*
+📍 *Universidad Tecnológica Tula-Tepeji (UTTT)*
