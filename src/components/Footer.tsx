@@ -11,7 +11,7 @@ export function Footer() {
             <h3 className="text-white font-bold text-xl mb-4">IMPERTULA</h3>
             <p className="mb-4 text-sm leading-relaxed">
               Especialistas en impermeabilización con más de 15 años de experiencia. 
-              Distribuidores autorizados de las marcas Fester y Heckel.
+              Distribuidores autorizados de las marcas Fester y Henkel.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 hover:text-blue-400 cursor-pointer transition-colors" />
@@ -39,7 +39,7 @@ export function Footer() {
             <h4 className="text-white font-semibold mb-4">Nuestros Productos</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="#" className="hover:text-white transition-colors">Impermeabilizantes Fester</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Aditivos Heckel</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Aditivos Henkel</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Selladores</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Primers</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Membranas</a></li>
@@ -57,11 +57,11 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+52 773 732 0000</span>
+                <span>+52 1 773 133 5692</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>info@festertula.com</span>
+                <span>Impertula@hotmail.com</span>
               </div>
               <div className="flex items-start space-x-2">
                 <Clock className="h-4 w-4 mt-0.5 flex-shrink-0" />
@@ -86,10 +86,10 @@ export function Footer() {
         
         <div className="mt-6 pt-6 border-t border-gray-700 text-center text-xs">
           <p>
-            Distribuidor autorizado de <span className="font-semibold text-blue-400">FESTER</span> y <span className="font-semibold text-green-400">HECKEL</span>
+            Distribuidor autorizado de <span className="font-semibold text-blue-400">FESTER</span> y <span className="font-semibold text-green-400">HENKEL</span>
           </p>
           <p className="mt-1 text-gray-500">
-            Las marcas Fester y Henckel son propiedad de sus respectivos fabricantes
+            Las marcas Fester y Henkel son propiedad de sus respectivos fabricantes
           </p>
         </div>
       </div>
