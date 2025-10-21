@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "./components/Header";
 import { HeroSection } from "./components/HeroSection";
 import { AboutSection } from "./components/AboutSection";
@@ -9,23 +9,42 @@ import { AssistanceSection } from "./components/AssistanceSection";
 import { Footer } from "./components/Footer";
 import { ProductDetail } from "./components/ProductDetail";
 import { ProjectDetail } from "./components/ProjectDetail";
-import { motion, AnimatePresence } from "framer-motion";
-import './global.css' // ← Asegúrate de que esta línea exista
+import { ProductsPage } from "./components/ProductsPage";
+import { ProjectsPage } from "./components/ProjectsPage";
+import { Login } from "./components/Login";
+import { AdminPanel } from "./components/AdminPanel";
+import { AuthProvider, useAuth } from "./lib/auth-context";
+import { motion, AnimatePresence } from "motion/react";
+import { Toaster } from "./components/ui/sonner";
+import workImage1 from "figma:asset/fa650a6a0a18dba261a5cee34d00a7146e2a0b4f.png";
+import workImage2 from "figma:asset/d0e23da5a30072fe88b0db84b52cea260b878bc6.png";
+import workImage3 from "figma:asset/2264f64b61e205723c7629af47513d9f5d16d709.png";
+import cfeRoofImage from "figma:asset/aeb1d84d9aee52d03e808aedad395a193003542b.png";
+import industrialWorkImage from "figma:asset/a52275f45d573bf57d26bfc9847afc77771e9298.png";
 
-type View = "home" | "product-detail" | "project-detail";
+type View = "home" | "products" | "projects" | "product-detail" | "project-detail" | "admin";
 
-export default function App() {
+function AppContent() {
   const [currentView, setCurrentView] = useState<View>("home");
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const { isAuthenticated, isAdmin, logout } = useAuth();
 
-  const handleProductClick = (productId: number) => {
+  // Proteger la vista de admin
+  useEffect(() => {
+    if (currentView === "admin" && !isAuthenticated) {
+      setCurrentView("home");
+    }
+  }, [isAuthenticated, currentView]);
+
+  const handleProductClick = (productId: string) => {
     setSelectedProductId(productId);
     setCurrentView("product-detail");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleProjectClick = (projectId: number) => {
+  const handleProjectClick = (projectId: string) => {
     setSelectedProjectId(projectId);
     setCurrentView("project-detail");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -38,9 +57,46 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleAdminClick = () => {
+    if (!isAuthenticated) {
+      setShowLogin(true);
+      return;
+    }
+    setCurrentView("admin");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleLogout = () => {
+    logout();
+    setCurrentView("home");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleViewAllProducts = () => {
+    setCurrentView("products");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleViewAllProjects = () => {
+    setCurrentView("projects");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen">
-      <Header onLogoClick={handleBackToHome} />
+      <Header 
+        onLogoClick={handleBackToHome}
+        onLoginClick={() => setShowLogin(true)}
+        onAdminClick={handleAdminClick}
+        onLogout={handleLogout}
+      />
+      
+      {showLogin && (
+        <Login 
+          onClose={() => setShowLogin(false)}
+          onLoginSuccess={handleAdminClick}
+        />
+      )}
       <AnimatePresence mode="wait">
         {currentView === "home" && (
           <motion.main
@@ -52,10 +108,46 @@ export default function App() {
           >
             <HeroSection />
             <AboutSection />
-            <ProductCarousel onProductClick={handleProductClick} />
-            <WorkSection onProjectClick={handleProjectClick} />
+            <ProductCarousel 
+              onProductClick={handleProductClick} 
+              onViewAll={handleViewAllProducts}
+            />
+            <WorkSection 
+              onProjectClick={handleProjectClick}
+              onViewAll={handleViewAllProjects}
+            />
             <ContactSection />
             <AssistanceSection />
+          </motion.main>
+        )}
+        
+        {currentView === "products" && (
+          <motion.main
+            key="products"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <ProductsPage 
+              onBack={handleBackToHome}
+              onProductClick={handleProductClick}
+            />
+          </motion.main>
+        )}
+        
+        {currentView === "projects" && (
+          <motion.main
+            key="projects"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <ProjectsPage 
+              onBack={handleBackToHome}
+              onProjectClick={handleProjectClick}
+            />
           </motion.main>
         )}
         
@@ -88,8 +180,29 @@ export default function App() {
             />
           </motion.main>
         )}
+        
+        {currentView === "admin" && (
+          <motion.main
+            key="admin"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <AdminPanel onBack={handleBackToHome} />
+          </motion.main>
+        )}
       </AnimatePresence>
       <Footer />
+      <Toaster />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }

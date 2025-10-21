@@ -1,16 +1,42 @@
-import { Button } from "./ui/controls/button";
-import { Menu, Phone, Mail } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Button } from "./ui/button";
+import { Menu, Mail, User, LogOut, Shield } from "lucide-react";
+import { useAuth } from "../lib/auth-context";
+import impertulaLogo from "figma:asset/a0ed4645e2c2d04e7dcad407574a9720f8232052.png";
 
 interface HeaderProps {
   onLogoClick?: () => void;
+  onLoginClick?: () => void;
+  onAdminClick?: () => void;
+  onLogout?: () => void;
 }
 
-export function Header({ onLogoClick }: HeaderProps) {
+export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: HeaderProps) {
+  const { user, isAuthenticated, isAdmin } = useAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 20;
+      setIsScrolled(scrolled);
+      
+      // Calcular progreso del scroll
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled_percent = (window.scrollY / windowHeight) * 100;
+      setScrollProgress(scrolled_percent);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Llamar inmediatamente para establecer el estado inicial
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const smoothScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     const element = document.querySelector(targetId);
     if (element) {
-      const headerOffset = 64; // altura del header sticky
+      const headerOffset = 80; // altura del header sticky (h-20)
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -22,21 +48,47 @@ export function Header({ onLogoClick }: HeaderProps) {
   };
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header 
+      className={`shadow-sm sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled ? 'bg-white' : 'bg-[#003366]'
+      }`}
+    >
+      {/* Barra de progreso - estilo rodillo pintando */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
+        <div 
+          className="h-full bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 transition-all duration-150 ease-out"
+          style={{ 
+            width: `${scrollProgress}%`,
+            boxShadow: '0 0 10px rgba(249, 115, 22, 0.5)'
+          }}
+        >
+          {/* Efecto de rodillo */}
+          <div 
+            className="absolute right-0 top-0 h-full w-8 bg-gradient-to-r from-transparent to-orange-600"
+            style={{
+              filter: 'blur(2px)',
+              transform: 'skewX(-10deg)'
+            }}
+          />
+        </div>
+      </div>
+      
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           <div className="flex items-center space-x-4">
-            <h1 
-              className="text-2xl font-bold text-primary cursor-pointer hover:text-primary/80 transition-colors"
+            <img 
+              src={impertulaLogo}
+              alt="IMPERTULA Logo"
+              className="h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               onClick={onLogoClick}
-            >
-              IMPERTULA
-            </h1>
-            <div className="hidden md:flex items-center space-x-1 text-sm text-muted-foreground">
+            />
+            <div className={`hidden md:flex items-center space-x-1 text-sm transition-colors ${
+              isScrolled ? 'text-muted-foreground' : 'text-white/90'
+            }`}>
               <span>Distribuidor autorizado</span>
-              <span className="font-semibold text-primary">FESTER</span>
+              <span className={`font-semibold ${isScrolled ? 'text-primary' : 'text-white'}`}>FESTER</span>
               <span>&</span>
-              <span className="font-semibold text-primary">HECKEL</span>
+              <span className={`font-semibold ${isScrolled ? 'text-primary' : 'text-white'}`}>HENKEL</span>
             </div>
           </div>
           
@@ -44,59 +96,124 @@ export function Header({ onLogoClick }: HeaderProps) {
             <a 
               href="#inicio" 
               onClick={(e) => smoothScrollTo(e, '#inicio')}
-              className="hover:text-primary transition-colors"
+              className={`transition-colors ${
+                isScrolled 
+                  ? 'text-foreground hover:text-primary' 
+                  : 'text-white hover:text-white/80'
+              }`}
             >
               Inicio
             </a>
             <a 
               href="#nosotros" 
               onClick={(e) => smoothScrollTo(e, '#nosotros')}
-              className="hover:text-primary transition-colors"
+              className={`transition-colors ${
+                isScrolled 
+                  ? 'text-foreground hover:text-primary' 
+                  : 'text-white hover:text-white/80'
+              }`}
             >
               Nosotros
             </a>
             <a 
               href="#productos" 
               onClick={(e) => smoothScrollTo(e, '#productos')}
-              className="hover:text-primary transition-colors"
+              className={`transition-colors ${
+                isScrolled 
+                  ? 'text-foreground hover:text-primary' 
+                  : 'text-white hover:text-white/80'
+              }`}
             >
               Productos
             </a>
             <a 
               href="#trabajos" 
               onClick={(e) => smoothScrollTo(e, '#trabajos')}
-              className="hover:text-primary transition-colors"
+              className={`transition-colors ${
+                isScrolled 
+                  ? 'text-foreground hover:text-primary' 
+                  : 'text-white hover:text-white/80'
+              }`}
             >
               Trabajos
             </a>
             <a 
               href="#contacto" 
               onClick={(e) => smoothScrollTo(e, '#contacto')}
-              className="hover:text-primary transition-colors"
+              className={`transition-colors ${
+                isScrolled 
+                  ? 'text-foreground hover:text-primary' 
+                  : 'text-white hover:text-white/80'
+              }`}
             >
               Contacto
             </a>
             <a 
               href="#asistencia" 
               onClick={(e) => smoothScrollTo(e, '#asistencia')}
-              className="hover:text-primary transition-colors"
+              className={`transition-colors ${
+                isScrolled 
+                  ? 'text-foreground hover:text-primary' 
+                  : 'text-white hover:text-white/80'
+              }`}
             >
               Asistencia
             </a>
           </nav>
 
           <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-4 text-sm">
-              <div className="flex items-center space-x-1">
-                <Phone className="h-4 w-4" />
-                <span>+52 773 732 0000</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Mail className="h-4 w-4" />
-                <span>info@festertula.com</span>
-              </div>
+            <div className={`hidden md:flex items-center space-x-1 text-sm transition-colors ${
+              isScrolled ? 'text-foreground' : 'text-white'
+            }`}>
+              <Mail className="h-4 w-4" />
+              <span>Impertula@hotmail.com</span>
             </div>
-            <Button variant="outline" size="sm" className="lg:hidden">
+            
+            {isAuthenticated ? (
+              <div className="flex items-center gap-2">
+                <span className={`text-sm hidden md:inline ${
+                  isScrolled ? 'text-muted-foreground' : 'text-white/90'
+                }`}>
+                  {user?.name}
+                </span>
+                {isAdmin && onAdminClick && (
+                  <Button 
+                    variant={isScrolled ? "outline" : "secondary"}
+                    size="sm"
+                    onClick={onAdminClick}
+                    className={`gap-1 ${!isScrolled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : ''}`}
+                  >
+                    <Shield className="h-4 w-4" />
+                    <span className="hidden md:inline">Admin</span>
+                  </Button>
+                )}
+                <Button 
+                  variant={isScrolled ? "outline" : "secondary"}
+                  size="sm"
+                  onClick={onLogout}
+                  className={`gap-1 ${!isScrolled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : ''}`}
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden md:inline">Salir</span>
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                variant={isScrolled ? "outline" : "secondary"}
+                size="sm"
+                onClick={onLoginClick}
+                className={`gap-1 ${!isScrolled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : ''}`}
+              >
+                <User className="h-4 w-4" />
+                <span className="hidden md:inline">Iniciar Sesión</span>
+              </Button>
+            )}
+            
+            <Button 
+              variant={isScrolled ? "outline" : "secondary"}
+              size="sm" 
+              className={`lg:hidden ${!isScrolled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : ''}`}
+            >
               <Menu className="h-4 w-4" />
             </Button>
           </div>

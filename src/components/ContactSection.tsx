@@ -1,10 +1,10 @@
-import { Button } from "./ui/controls/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/data-dispaly/cardGlobal/card";
-import { Input } from "./ui/forms/input";
-import { Textarea } from "./ui/forms/textarea";
-import { Label } from "./ui/forms/label";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export function ContactSection() {
   return (
@@ -121,8 +121,8 @@ export function ContactSection() {
                   <div>
                     <h4 className="font-semibold">Teléfonos</h4>
                     <p className="text-muted-foreground">
-                      +52 773 732 0000<br />
-                      +52 773 732 0001
+                      +52 1 773 133 5692<br />
+                      +52 1 773 124 6119
                     </p>
                   </div>
                 </div>
@@ -130,10 +130,9 @@ export function ContactSection() {
                 <div className="flex items-start space-x-3">
                   <Mail className="h-5 w-5 text-primary mt-0.5" />
                   <div>
-                    <h4 className="font-semibold">Correos</h4>
+                    <h4 className="font-semibold">Correo</h4>
                     <p className="text-muted-foreground">
-                      info@festertula.com<br />
-                      ventas@festertula.com
+                      Impertula@hotmail.com
                     </p>
                   </div>
                 </div>

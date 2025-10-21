@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/data-dispaly/cardGlobal/card";
-import { Button } from "./ui/controls/button";
-import { Badge } from "./ui/data-dispaly/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 import { 
   Users, 
   FileText, 
@@ -13,7 +13,7 @@ import {
   Clock,
   User
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const services = [
   {
@@ -45,19 +45,21 @@ const services = [
 const supportChannels = [
   {
     icon: Phone,
-    title: "Línea Técnica Directa",
-    description: "Soporte telefónico inmediato",
-    contact: "+52 773 732 TECH (8324)",
+    title: "Especialista Principal",
+    description: "Contacto directo con especialista",
+    contact: "+52 1 773 133 5692",
     hours: "Lun-Vie 8:00-18:00",
-    status: "Disponible"
+    status: "Disponible",
+    whatsapp: "5217731335692"
   },
   {
     icon: MessageCircle,
-    title: "Chat en Línea",
-    description: "Asesoría técnica instantánea",
-    contact: "chat@festertula.com",
+    title: "Soporte Técnico",
+    description: "Asesoría técnica por WhatsApp",
+    contact: "+52 1 773 124 6119",
     hours: "Lun-Vie 9:00-17:00",
-    status: "En Línea"
+    status: "En Línea",
+    whatsapp: "5217731246119"
   },
   {
     icon: Calendar,
@@ -65,7 +67,8 @@ const supportChannels = [
     description: "Inspección y asesoría en sitio",
     contact: "Agenda tu cita",
     hours: "Por cita",
-    status: "Programable"
+    status: "Programable",
+    whatsapp: "5217731335692"
   }
 ];
 
@@ -74,7 +77,7 @@ const specialists = [
     name: "Ing. Carlos Mendoza",
     specialty: "Impermeabilización Industrial",
     experience: "12 años",
-    certifications: ["Fester Certified", "Heckel Expert"]
+    certifications: ["Fester Certified", "Henkel Expert"]
   },
   {
     name: "Arq. Ana Rodríguez",
@@ -86,7 +89,7 @@ const specialists = [
     name: "Ing. Roberto Silva",
     specialty: "Aditivos para Concreto",
     experience: "15 años",
-    certifications: ["Heckel Master", "Especialista Químico"]
+    certifications: ["Henkel Master", "Especialista Químico"]
   }
 ];
 
@@ -191,8 +194,13 @@ export function AssistanceSection() {
                   <Button 
                     className="w-full mt-4" 
                     variant={channel.status === 'En Línea' ? 'default' : 'outline'}
+                    onClick={() => {
+                      if ((channel as any).whatsapp) {
+                        window.open(`https://wa.me/${(channel as any).whatsapp}`, '_blank');
+                      }
+                    }}
                   >
-                    {channel.status === 'Programable' ? 'Agendar Cita' : 'Contactar Ahora'}
+                    {channel.status === 'Programable' ? 'Agendar por WhatsApp' : 'Contactar por WhatsApp'}
                   </Button>
                 </CardContent>
               </Card>
@@ -272,13 +280,20 @@ export function AssistanceSection() {
             tenemos la experiencia y conocimiento para garantizar el éxito de tu aplicación.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
+            <Button 
+              size="lg"
+              onClick={() => window.open('https://wa.me/5217731335692', '_blank')}
+            >
               <Phone className="mr-2 h-5 w-5" />
               Llamar Ahora
             </Button>
-            <Button size="lg" variant="outline">
+            <Button 
+              size="lg" 
+              variant="outline"
+              onClick={() => window.open('https://wa.me/5217731246119', '_blank')}
+            >
               <MessageCircle className="mr-2 h-5 w-5" />
-              Iniciar Chat
+              WhatsApp
             </Button>
           </div>
         </motion.div>
