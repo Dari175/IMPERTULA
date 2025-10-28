@@ -6,13 +6,34 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { AspectRatio } from "./ui/aspect-ratio";
 import { ArrowRight, MapPin, Calendar, CheckCircle } from "lucide-react";
 import { motion } from "motion/react";
-import { projectApi, Project } from "../lib/api";
+import { projectApi, Project, ProjectImage } from "../lib/api";
 import Autoplay from "embla-carousel-autoplay@8.6.0";
 
 interface WorkSectionProps {
   onProjectClick?: (projectId: string) => void;
   onViewAll?: () => void;
 }
+
+// Función utilitaria para obtener la URL de la imagen principal
+const getPrincipalImageUrl = (project: Project): string | null => {
+  // Prioridad 1: Buscar en imagenes array
+  if (project.imagenes && project.imagenes.length > 0) {
+    const principal = project.imagenes.find(img => img.esPrincipal) || project.imagenes[0];
+    
+    if (principal.tipo === 'url' && principal.url) {
+      return principal.url;
+    } else if (principal.tipo === 'base64' && principal.data && principal.mimeType) {
+      return `data:${principal.mimeType};base64,${principal.data}`;
+    }
+  }
+  
+  // Prioridad 2: URL legacy
+  if (project.urlImagen) {
+    return project.urlImagen;
+  }
+  
+  return null;
+};
 
 export function WorkSection({ onProjectClick, onViewAll }: WorkSectionProps) {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -94,11 +115,17 @@ export function WorkSection({ onProjectClick, onViewAll }: WorkSectionProps) {
                   <Card className="overflow-hidden group hover:shadow-lg transition-shadow duration-300 h-full">
                     <div className="relative">
                       <AspectRatio ratio={16/9}>
-                        <img
-                          src={project.urlImagen}
-                          alt={project.titulo}
-                          className="w-full h-full object-cover"
-                        />
+                        {getPrincipalImageUrl(project) ? (
+                          <img
+                            src={getPrincipalImageUrl(project)!}
+                            alt={project.titulo}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-muted-foreground">Sin imagen</span>
+                          </div>
+                        )}
                       </AspectRatio>
                       <div className="absolute top-4 left-4">
                         <Badge variant={project.estado === "Completado" ? "default" : "secondary"}>

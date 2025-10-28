@@ -29,6 +29,19 @@ export interface Product {
   };
 }
 
+export interface ProjectImage {
+  _id?: string;
+  nombre?: string;
+  tipo: 'url' | 'base64';
+  // Para imágenes tipo URL
+  url?: string;
+  // Para imágenes tipo Base64
+  mimeType?: string;
+  data?: string;
+  size?: number;
+  esPrincipal?: boolean;
+}
+
 export interface Project {
   _id?: string;
   id?: string;
@@ -44,12 +57,16 @@ export interface Project {
   descripcionCorta: string;
   // Campos opcionales
   fecha?: string;
-  urlImagen?: string;
+  urlImagen?: string; // Campo legacy - mantener para retrocompatibilidad
+  imagenes?: ProjectImage[]; // Nuevo campo flexible: soporta URLs Y Base64
   descripcionCompleta?: string;
   desafios?: string;
   soluciones?: string;
   resultados?: string;
   productosUtilizados?: string;
+  // Virtuals del backend
+  imagenPrincipal?: ProjectImage;
+  todasLasImagenes?: ProjectImage[];
 }
 
 // Obtener token del localStorage
@@ -122,8 +139,17 @@ export const productApi = {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Error al crear producto');
+        // Verificar si la respuesta es JSON o HTML
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const error = await response.json();
+          throw new Error(error.message || 'Error al crear producto');
+        } else {
+          // Si no es JSON, probablemente es HTML (error del servidor)
+          const errorText = await response.text();
+          console.error('Error response (non-JSON):', errorText.substring(0, 200));
+          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+        }
       }
       
       const data = await response.json();
@@ -150,8 +176,17 @@ export const productApi = {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Error al actualizar producto');
+        // Verificar si la respuesta es JSON o HTML
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const error = await response.json();
+          throw new Error(error.message || 'Error al actualizar producto');
+        } else {
+          // Si no es JSON, probablemente es HTML (error del servidor)
+          const errorText = await response.text();
+          console.error('Error response (non-JSON):', errorText.substring(0, 200));
+          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+        }
       }
       
       const data = await response.json();
@@ -176,8 +211,17 @@ export const productApi = {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Error al eliminar producto');
+        // Verificar si la respuesta es JSON o HTML
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const error = await response.json();
+          throw new Error(error.message || 'Error al eliminar producto');
+        } else {
+          // Si no es JSON, probablemente es HTML (error del servidor)
+          const errorText = await response.text();
+          console.error('Error response (non-JSON):', errorText.substring(0, 200));
+          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+        }
       }
     } catch (error) {
       console.error('Error en productApi.delete:', error);
@@ -241,22 +285,43 @@ export const projectApi = {
       const token = getAuthToken();
       if (!token) throw new Error('No hay token de autenticación');
 
+      // Calcular tamaño aproximado del payload
+      const payloadString = JSON.stringify(project);
+      const payloadSizeMB = (payloadString.length / 1024 / 1024).toFixed(2);
+      console.log(`Tamaño del payload: ${payloadSizeMB}MB`);
+      
+      // Advertir si el payload es muy grande
+      if (parseFloat(payloadSizeMB) > 10) {
+        console.warn('⚠️ El payload es muy grande. MongoDB tiene un límite de 16MB por documento.');
+      }
+
       const response = await fetch(API_URLS.projects, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(project)
+        body: payloadString
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Error al crear proyecto');
+        // Verificar si la respuesta es JSON o HTML
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const error = await response.json();
+          console.error('Error del servidor:', error);
+          throw new Error(error.message || error.error || 'Error al crear proyecto');
+        } else {
+          // Si no es JSON, probablemente es HTML (error del servidor)
+          const errorText = await response.text();
+          console.error('Error response (non-JSON):', errorText.substring(0, 500));
+          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+        }
       }
       
       const data = await response.json();
-      return data;
+      console.log('Proyecto creado exitosamente:', data);
+      return data.data || data;
     } catch (error) {
       console.error('Error en projectApi.create:', error);
       throw error;
@@ -279,8 +344,17 @@ export const projectApi = {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Error al actualizar proyecto');
+        // Verificar si la respuesta es JSON o HTML
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const error = await response.json();
+          throw new Error(error.message || 'Error al actualizar proyecto');
+        } else {
+          // Si no es JSON, probablemente es HTML (error del servidor)
+          const errorText = await response.text();
+          console.error('Error response (non-JSON):', errorText.substring(0, 200));
+          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+        }
       }
       
       const data = await response.json();
@@ -305,8 +379,17 @@ export const projectApi = {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Error al eliminar proyecto');
+        // Verificar si la respuesta es JSON o HTML
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const error = await response.json();
+          throw new Error(error.message || 'Error al eliminar proyecto');
+        } else {
+          // Si no es JSON, probablemente es HTML (error del servidor)
+          const errorText = await response.text();
+          console.error('Error response (non-JSON):', errorText.substring(0, 200));
+          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+        }
       }
     } catch (error) {
       console.error('Error en projectApi.delete:', error);

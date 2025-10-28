@@ -4,7 +4,33 @@ import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ArrowLeft, MapPin, Calendar, CheckCircle, Users, Ruler, Clock, Award, Image as ImageIcon } from "lucide-react";
 import { motion } from "motion/react";
-import { projectApi, Project } from "../lib/api";
+import { projectApi, Project, ProjectImage } from "../lib/api";
+
+// Función utilitaria para obtener la URL de imagen
+const getImageUrl = (img: ProjectImage): string | null => {
+  if (img.tipo === 'url' && img.url) {
+    return img.url;
+  } else if (img.tipo === 'base64' && img.data && img.mimeType) {
+    return `data:${img.mimeType};base64,${img.data}`;
+  }
+  return null;
+};
+
+// Función utilitaria para obtener la URL de la imagen principal
+const getPrincipalImageUrl = (project: Project): string | null => {
+  // Prioridad 1: Buscar en imagenes array
+  if (project.imagenes && project.imagenes.length > 0) {
+    const principal = project.imagenes.find(img => img.esPrincipal) || project.imagenes[0];
+    return getImageUrl(principal);
+  }
+  
+  // Prioridad 2: URL legacy
+  if (project.urlImagen) {
+    return project.urlImagen;
+  }
+  
+  return null;
+};
 
 interface ProjectDetailProps {
   projectId: string;
@@ -104,9 +130,9 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         >
           <Card className="overflow-hidden">
             <div className="relative h-96">
-              {project.urlImagen && typeof project.urlImagen === 'string' ? (
+              {getPrincipalImageUrl(project) ? (
                 <img
-                  src={project.urlImagen}
+                  src={getPrincipalImageUrl(project)!}
                   alt={project.titulo || 'Proyecto'}
                   className="w-full h-full object-cover"
                 />
