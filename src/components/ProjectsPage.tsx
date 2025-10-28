@@ -15,7 +15,7 @@ import {
   ChevronDown
 } from "lucide-react";
 import { motion } from "motion/react";
-import { projectApi, Project } from "../lib/api";
+import { projectApi, Project, ProjectImage } from "../lib/api";
 import {
   Select,
   SelectContent,
@@ -29,6 +29,27 @@ import {
   CollapsibleTrigger,
 } from "./ui/collapsible";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+
+// Función utilitaria para obtener la URL de la imagen principal
+const getPrincipalImageUrl = (project: Project): string | null => {
+  // Prioridad 1: Buscar en imagenes array
+  if (project.imagenes && project.imagenes.length > 0) {
+    const principal = project.imagenes.find(img => img.esPrincipal) || project.imagenes[0];
+    
+    if (principal.tipo === 'url' && principal.url) {
+      return principal.url;
+    } else if (principal.tipo === 'base64' && principal.data && principal.mimeType) {
+      return `data:${principal.mimeType};base64,${principal.data}`;
+    }
+  }
+  
+  // Prioridad 2: URL legacy
+  if (project.urlImagen) {
+    return project.urlImagen;
+  }
+  
+  return null;
+};
 
 interface ProjectsPageProps {
   onBack: () => void;
@@ -368,11 +389,17 @@ function ProjectCard({ project, index, onClick }: { project: Project; index: num
       <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 h-full cursor-pointer" onClick={onClick}>
         <div className="relative">
           <AspectRatio ratio={16/10}>
-            <img
-              src={project.urlImagen}
-              alt={project.titulo}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            />
+            {getPrincipalImageUrl(project) ? (
+              <img
+                src={getPrincipalImageUrl(project)!}
+                alt={project.titulo}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                <span className="text-muted-foreground">Sin imagen</span>
+              </div>
+            )}
           </AspectRatio>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
