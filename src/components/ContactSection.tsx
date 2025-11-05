@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
@@ -5,8 +6,82 @@ import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { motion } from "motion/react";
+import { toast } from "sonner@2.0.3";
+
+const API_URL = "https://contactapi-850i.onrender.com/api/contact";
 
 export function ContactSection() {
+  const [formData, setFormData] = useState({
+    name: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    company: "",
+    projectType: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validar campos obligatorios
+    if (!formData.name || !formData.lastName || !formData.email || !formData.phone || !formData.projectType || !formData.message) {
+      toast.error("Por favor completa todos los campos obligatorios");
+      return;
+    }
+
+    // Validar formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Por favor ingresa un correo electrónico válido");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast.success("¡Mensaje enviado exitosamente! Nos pondremos en contacto contigo pronto.");
+        // Limpiar formulario
+        setFormData({
+          name: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          company: "",
+          projectType: "",
+          message: "",
+        });
+      } else {
+        toast.error(data.error || "Error al enviar el mensaje. Por favor intenta nuevamente.");
+      }
+    } catch (error) {
+      console.error("Error al enviar mensaje:", error);
+      toast.error("Error de conexión. Por favor verifica tu internet e intenta nuevamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="contacto" className="py-20">
       <div className="container mx-auto px-4">
@@ -36,57 +111,106 @@ export function ContactSection() {
               <CardHeader>
                 <CardTitle>Envíanos un Mensaje</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">Nombre</Label>
-                    <Input id="firstName" placeholder="Tu nombre" />
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Nombre *</Label>
+                      <Input 
+                        id="name" 
+                        placeholder="Tu nombre" 
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">Apellido *</Label>
+                      <Input 
+                        id="lastName" 
+                        placeholder="Tu apellido" 
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        required
+                        disabled={isSubmitting}
+                      />
+                    </div>
                   </div>
+                  
                   <div className="space-y-2">
-                    <Label htmlFor="lastName">Apellido</Label>
-                    <Input id="lastName" placeholder="Tu apellido" />
+                    <Label htmlFor="email">Correo Electrónico *</Label>
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="tu@email.com" 
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      disabled={isSubmitting}
+                    />
                   </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="email">Correo Electrónico</Label>
-                  <Input id="email" type="email" placeholder="tu@email.com" />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Teléfono</Label>
-                  <Input id="phone" type="tel" placeholder="+52 773 732 0000" />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="company">Empresa (Opcional)</Label>
-                  <Input id="company" placeholder="Nombre de tu empresa" />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="project">Tipo de Proyecto</Label>
-                  <select className="w-full px-3 py-2 border border-border rounded-md bg-background">
-                    <option value="">Selecciona un tipo</option>
-                    <option value="residencial">Residencial</option>
-                    <option value="comercial">Comercial</option>
-                    <option value="industrial">Industrial</option>
-                    <option value="institucional">Institucional</option>
-                  </select>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="message">Mensaje</Label>
-                  <Textarea 
-                    id="message" 
-                    placeholder="Cuéntanos sobre tu proyecto, área a impermeabilizar, productos de interés, etc."
-                    rows={4}
-                  />
-                </div>
-                
-                <Button className="w-full">
-                  <Send className="mr-2 h-4 w-4" />
-                  Enviar Mensaje
-                </Button>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Teléfono *</Label>
+                    <Input 
+                      id="phone" 
+                      type="tel" 
+                      placeholder="+52 773 732 0000" 
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="company">Empresa (Opcional)</Label>
+                    <Input 
+                      id="company" 
+                      placeholder="Nombre de tu empresa" 
+                      value={formData.company}
+                      onChange={handleInputChange}
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="projectType">Tipo de Proyecto *</Label>
+                    <select 
+                      id="projectType"
+                      className="w-full px-3 py-2 border border-border rounded-md bg-background"
+                      value={formData.projectType}
+                      onChange={handleInputChange}
+                      required
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Selecciona un tipo</option>
+                      <option value="residencial">Residencial</option>
+                      <option value="comercial">Comercial</option>
+                      <option value="industrial">Industrial</option>
+                      <option value="institucional">Institucional</option>
+                    </select>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Mensaje *</Label>
+                    <Textarea 
+                      id="message" 
+                      placeholder="Cuéntanos sobre tu proyecto, área a impermeabilizar, productos de interés, etc."
+                      rows={4}
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  
+                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    <Send className="mr-2 h-4 w-4" />
+                    {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </motion.div>
