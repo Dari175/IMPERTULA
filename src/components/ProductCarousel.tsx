@@ -43,7 +43,7 @@ export function ProductCarousel({ onProductClick, onViewAll }: ProductCarouselPr
     }
   };
   return (
-    <section id="productos" className="py-20">
+    <section id="productos" className="py-12 md:py-20">
       <div className="container mx-auto px-4">
         <motion.div 
           className="text-center mb-12"
@@ -52,8 +52,8 @@ export function ProductCarousel({ onProductClick, onViewAll }: ProductCarouselPr
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl font-bold mb-4">Nuestros Productos</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="mb-4">Nuestros Productos</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base">
             Descubre nuestra amplia gama de productos de impermeabilización y aditivos 
             de las marcas más reconocidas del mercado
           </p>
@@ -75,7 +75,7 @@ export function ProductCarousel({ onProductClick, onViewAll }: ProductCarouselPr
             </div>
           ) : (
           <Carousel 
-            className="w-full"
+            className="w-full px-8 md:px-0"
             opts={{
               align: "start",
               loop: true,
@@ -104,21 +104,21 @@ export function ProductCarousel({ onProductClick, onViewAll }: ProductCarouselPr
                         className="w-full h-48 object-cover rounded-t-lg"
                       />
                     )}
-                    <div className="absolute top-4 left-4">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                    <div className="absolute top-2 left-2 md:top-4 md:left-4">
+                      <span className={`px-2 py-0.5 md:py-1 text-[10px] md:text-xs font-semibold rounded-full ${
                         product.brand === 'Fester' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
                       }`}>
                         {product.brand}
                       </span>
                     </div>
-                    <div className="absolute top-4 right-4 bg-white/90 px-2 py-1 rounded">
-                      <span className="text-sm text-muted-foreground">{product.category}</span>
+                    <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white/90 px-1.5 md:px-2 py-0.5 md:py-1 rounded">
+                      <span className="text-[10px] md:text-sm text-muted-foreground">{product.category}</span>
                     </div>
                   </div>
                   
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold mb-2">{product.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4">{product.description}</p>
+                  <CardContent className="p-4 md:p-6">
+                    <h3 className="mb-2 text-sm md:text-base">{product.name}</h3>
+                    <p className="text-xs md:text-sm text-muted-foreground mb-4 line-clamp-2">{product.description}</p>
                     
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-1">
@@ -136,6 +136,7 @@ export function ProductCarousel({ onProductClick, onViewAll }: ProductCarouselPr
                       <Button 
                         variant="outline" 
                         size="sm"
+                        className="text-xs md:text-sm h-8 md:h-9 px-2 md:px-3"
                         onClick={() => onProductClick?.(product._id || product.id || "")}
                       >
                         Ver Detalles
