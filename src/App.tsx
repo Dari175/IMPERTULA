@@ -13,6 +13,7 @@ import { ProductsPage } from "./components/ProductsPage";
 import { ProjectsPage } from "./components/ProjectsPage";
 import { Login } from "./components/Login";
 import { AdminPanel } from "./components/AdminPanel";
+import { FaviconHandler } from "./components/FaviconHandler";
 import { AuthProvider, useAuth } from "./lib/auth-context";
 import { motion, AnimatePresence } from "motion/react";
 import { Toaster } from "./components/ui/sonner";
@@ -84,6 +85,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen">
+      <FaviconHandler />
       <Header 
         onLogoClick={handleBackToHome}
         onLoginClick={() => setShowLogin(true)}

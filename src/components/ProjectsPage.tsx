@@ -12,7 +12,8 @@ import {
   CheckCircle,
   Clock,
   SlidersHorizontal,
-  ChevronDown
+  ChevronDown,
+  Wrench
 } from "lucide-react";
 import { motion } from "motion/react";
 import { projectApi, Project, ProjectImage } from "../lib/api";
@@ -111,9 +112,14 @@ export function ProjectsPage({ onBack, onProjectClick }: ProjectsPageProps) {
       filtered = filtered.filter(project => project.categoria === selectedCategory);
     }
 
-    // Filtro de estado
+    // Filtro de estado - ARREGLADO
     if (selectedStatus !== "all") {
-      filtered = filtered.filter(project => project.estado === selectedStatus);
+      filtered = filtered.filter(project => {
+        // Normalizar el estado para comparación
+        const normalizedProjectState = project.estado?.toLowerCase().trim() || "";
+        const normalizedFilterState = selectedStatus.toLowerCase().trim();
+        return normalizedProjectState === normalizedFilterState;
+      });
     }
 
     // Ordenamiento
@@ -138,8 +144,13 @@ export function ProjectsPage({ onBack, onProjectClick }: ProjectsPageProps) {
   const categories = ["all", ...Array.from(new Set(projects.map(p => p.categoria)))];
   const statuses = ["all", ...Array.from(new Set(projects.map(p => p.estado)))];
 
-  const completedProjects = filteredProjects.filter(p => p.estado === "Completado");
-  const inProgressProjects = filteredProjects.filter(p => p.estado === "En Progreso");
+  const completedProjects = filteredProjects.filter(p => 
+    p.estado?.toLowerCase().trim() === "completado"
+  );
+  const inProgressProjects = filteredProjects.filter(p => 
+    p.estado?.toLowerCase().trim() === "en progreso" || 
+    p.estado?.toLowerCase().trim() === "en proceso"
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -396,16 +407,18 @@ function ProjectCard({ project, index, onClick }: { project: Project; index: num
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
             ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <span className="text-muted-foreground">Sin imagen</span>
+              <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center gap-3">
+                <Wrench className="h-12 w-12 text-gray-400 animate-pulse" />
+                <span className="text-gray-500 font-medium">En Mantenimiento</span>
+                <span className="text-xs text-gray-400 px-4 text-center">Próximamente agregaremos imágenes de este proyecto</span>
               </div>
             )}
           </AspectRatio>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           <div className="absolute top-4 left-4 flex gap-2">
-            <Badge variant={project.estado === "Completado" ? "default" : "secondary"} className="shadow-lg">
-              {project.estado === "Completado" ? (
+            <Badge variant={project.estado?.toLowerCase().trim() === "completado" ? "default" : "secondary"} className="shadow-lg">
+              {project.estado?.toLowerCase().trim() === "completado" ? (
                 <CheckCircle className="h-3 w-3 mr-1" />
               ) : (
                 <Clock className="h-3 w-3 mr-1" />

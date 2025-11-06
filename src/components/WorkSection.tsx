@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 import { AspectRatio } from "./ui/aspect-ratio";
-import { ArrowRight, MapPin, Calendar, CheckCircle } from "lucide-react";
+import { ArrowRight, MapPin, Calendar, CheckCircle, Clock, Wrench } from "lucide-react";
 import { motion } from "motion/react";
 import { projectApi, Project, ProjectImage } from "../lib/api";
-import Autoplay from "embla-carousel-autoplay@8.6.0";
+import backgroundImage from "figma:asset/d3d678ed3de5d7c79f508ad5d7b35231f3202b61.png";
 
 interface WorkSectionProps {
   onProjectClick?: (projectId: string) => void;
@@ -64,18 +63,29 @@ export function WorkSection({ onProjectClick, onViewAll }: WorkSectionProps) {
       setLoading(false);
     }
   };
+  
   return (
-    <section id="trabajos" className="py-20 bg-white">
-      <div className="container mx-auto px-4">
+    <section id="trabajos" className="py-20 relative overflow-hidden">
+      {/* Imagen de fondo con overlay */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={backgroundImage}
+          alt="Proyecto de impermeabilización"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-16 text-white"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl font-bold mb-6">Nuestros Trabajos</h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-lg text-white/90 max-w-3xl mx-auto">
             Conoce algunos de nuestros proyectos más destacados en impermeabilización. 
             Cada trabajo refleja nuestro compromiso con la calidad y la excelencia técnica.
           </p>
@@ -97,82 +107,89 @@ export function WorkSection({ onProjectClick, onViewAll }: WorkSectionProps) {
               <p className="text-muted-foreground">No hay proyectos disponibles</p>
             </div>
           ) : (
-          <Carousel 
-            className="w-full"
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            plugins={[
-              Autoplay({
-                delay: 5000,
-              }),
-            ]}
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {projects.map((project) => (
-                <CarouselItem key={project._id || project.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                  <Card className="overflow-hidden group hover:shadow-lg transition-shadow duration-300 h-full">
-                    <div className="relative">
-                      <AspectRatio ratio={16/9}>
-                        {getPrincipalImageUrl(project) ? (
-                          <img
-                            src={getPrincipalImageUrl(project)!}
-                            alt={project.titulo}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-muted-foreground">Sin imagen</span>
-                          </div>
-                        )}
-                      </AspectRatio>
-                      <div className="absolute top-4 left-4">
-                        <Badge variant={project.estado === "Completado" ? "default" : "secondary"}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.slice(0, 6).map((project, index) => (
+              <motion.div
+                key={project._id || project.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="overflow-hidden group hover:shadow-2xl transition-all duration-300 h-full cursor-pointer bg-white/80 backdrop-blur-sm">
+                  <div className="relative" onClick={() => onProjectClick?.(project._id || project.id || "")}>
+                    <AspectRatio ratio={16/10}>
+                      {getPrincipalImageUrl(project) ? (
+                        <img
+                          src={getPrincipalImageUrl(project)!}
+                          alt={project.titulo}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center gap-3">
+                          <Wrench className="h-12 w-12 text-gray-400 animate-pulse" />
+                          <span className="text-gray-500 font-medium">En Mantenimiento</span>
+                          <span className="text-xs text-gray-400 px-4 text-center">Próximamente agregaremos imágenes de este proyecto</span>
+                        </div>
+                      )}
+                    </AspectRatio>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    
+                    <div className="absolute top-4 left-4">
+                      <Badge variant={project.estado === "Completado" ? "default" : "secondary"} className="shadow-lg">
+                        {project.estado === "Completado" ? (
                           <CheckCircle className="h-3 w-3 mr-1" />
-                          {project.estado}
-                        </Badge>
-                      </div>
-                      <div className="absolute top-4 right-4">
-                        <Badge variant="outline" className="bg-white/90">
-                          {project.categoria}
-                        </Badge>
-                      </div>
+                        ) : (
+                          <Clock className="h-3 w-3 mr-1" />
+                        )}
+                        {project.estado}
+                      </Badge>
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <Badge variant="outline" className="bg-white/90 shadow-lg">
+                        {project.categoria}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <CardContent className="p-5">
+                    <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-1">
+                      {project.titulo}
+                    </h3>
+                    
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                      {project.descripcionCorta || project.descripcion}
+                    </p>
+                    
+                    <div className="space-y-2 text-sm">
+                      {project.ubicacion && (
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <MapPin className="h-4 w-4 shrink-0" />
+                          <span className="line-clamp-1">{project.ubicacion}</span>
+                        </div>
+                      )}
+                      
+                      {(project.fechaFinalizacion || project.fecha) && (
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Calendar className="h-4 w-4 shrink-0" />
+                          <span>{project.fecha || new Date(project.fechaFinalizacion).toLocaleDateString('es-MX', { year: 'numeric', month: 'long' })}</span>
+                        </div>
+                      )}
                     </div>
                     
-                    <CardContent className="p-6">
-                      <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
-                        {project.titulo}
-                      </h3>
-                      
-                      <div className="flex items-center text-muted-foreground mb-3 text-sm">
-                        <MapPin className="h-3 w-3 mr-1" />
-                        <span className="truncate flex-1">{project.ubicacion}</span>
-                        <Calendar className="h-3 w-3 ml-2 mr-1" />
-                        <span>{project.fecha}</span>
-                      </div>
-                      
-                      <p className="text-muted-foreground mb-4 leading-relaxed text-sm">
-                        {project.descripcionCorta}
-                      </p>
-                      
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                        onClick={() => onProjectClick?.(project._id || project.id || "")}
-                      >
-                        Ver Detalles
-                        <ArrowRight className="h-3 w-3 ml-2" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full mt-4 group-hover:bg-primary group-hover:text-white transition-colors"
+                      onClick={() => onProjectClick?.(project._id || project.id || "")}
+                    >
+                      Ver Detalles
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
           )}
         </motion.div>
         
