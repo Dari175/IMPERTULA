@@ -77,20 +77,20 @@ export function HeroSection({ onViewProducts, onContact }: HeroSectionProps) {
           </div>
           
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 mb-12"
+            className="flex flex-wrap gap-4 mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.5 }}
           >
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={scrollToProducts}>
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white w-auto" onClick={scrollToProducts}>
               Ver Productos
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
               size="lg" 
               variant="outline" 
-              className="bg-white text-black border-white hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
+              className="bg-white text-black border-white hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all w-auto"
               onClick={scrollToContact}
             >
               Contactar Ahora
@@ -122,7 +122,7 @@ export function HeroSection({ onViewProducts, onContact }: HeroSectionProps) {
       
       {/* Scroll Indicator */}
       <motion.div 
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center cursor-pointer"
+        className="absolute bottom-16 md:bottom-20 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center cursor-pointer"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.8 }}
@@ -133,19 +133,22 @@ export function HeroSection({ onViewProducts, onContact }: HeroSectionProps) {
           }
         }}
       >
-        <motion.p 
-          className="text-white text-sm mb-2 font-medium"
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          Desliza hacia abajo
-        </motion.p>
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ChevronDown className="h-8 w-8 text-blue-400" />
-        </motion.div>
+        <div className="bg-black/40 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20 shadow-lg">
+          <motion.p 
+            className="text-white text-sm mb-2 font-medium text-center drop-shadow-lg"
+            animate={{ opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Desliza hacia abajo
+          </motion.p>
+          <motion.div
+            className="flex justify-center"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ChevronDown className="h-8 w-8 text-blue-400 drop-shadow-lg" />
+          </motion.div>
+        </div>
       </motion.div>
     </section>
   );
