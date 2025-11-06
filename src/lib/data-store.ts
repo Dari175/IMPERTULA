@@ -254,6 +254,9 @@ export function initializeProjects(images: {
   workImage3: string;
   cfeRoofImage: string;
   industrialWorkImage: string;
+  clientLogos1: string;
+  clientLogos2: string;
+  clientLogos3: string;
 }) {
   projectsData = [
     {

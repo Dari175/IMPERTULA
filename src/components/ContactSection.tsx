@@ -5,8 +5,9 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner@2.0.3";
+import { SendingOverlay } from "./SendingOverlay";
 
 const API_URL = "https://contactapi-850i.onrender.com/api/contact";
 
@@ -21,6 +22,61 @@ export function ContactSection() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSendingOverlay, setShowSendingOverlay] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    // Permite números con espacios, guiones, paréntesis y el símbolo +
+    const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+    const digitsOnly = phone.replace(/\D/g, '');
+    return phoneRegex.test(phone) && digitsOnly.length >= 10;
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "El nombre es obligatorio";
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = "El nombre debe tener al menos 2 caracteres";
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "El apellido es obligatorio";
+    } else if (formData.lastName.trim().length < 2) {
+      newErrors.lastName = "El apellido debe tener al menos 2 caracteres";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "El correo electrónico es obligatorio";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Por favor ingresa un correo electrónico válido";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "El teléfono es obligatorio";
+    } else if (!validatePhone(formData.phone)) {
+      newErrors.phone = "Por favor ingresa un número de teléfono válido (mínimo 10 dígitos)";
+    }
+
+    if (!formData.projectType) {
+      newErrors.projectType = "Por favor selecciona un tipo de proyecto";
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = "El mensaje es obligatorio";
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = "El mensaje debe tener al menos 10 caracteres";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
@@ -28,25 +84,31 @@ export function ContactSection() {
       ...prev,
       [id]: value,
     }));
+    // Limpiar error del campo al escribir
+    if (errors[id]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[id];
+        return newErrors;
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar campos obligatorios
-    if (!formData.name || !formData.lastName || !formData.email || !formData.phone || !formData.projectType || !formData.message) {
-      toast.error("Por favor completa todos los campos obligatorios");
-      return;
-    }
-
-    // Validar formato de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast.error("Por favor ingresa un correo electrónico válido");
+    if (!validateForm()) {
+      toast.error("Por favor corrige los errores en el formulario");
       return;
     }
 
     setIsSubmitting(true);
+    setShowSendingOverlay(true);
+
+    // Ocultar el overlay después de 2 segundos, aunque el envío continúe
+    setTimeout(() => {
+      setShowSendingOverlay(false);
+    }, 2000);
 
     try {
       const response = await fetch(API_URL, {
@@ -71,6 +133,7 @@ export function ContactSection() {
           projectType: "",
           message: "",
         });
+        setErrors({});
       } else {
         toast.error(data.error || "Error al enviar el mensaje. Por favor intenta nuevamente.");
       }
@@ -124,6 +187,7 @@ export function ContactSection() {
                         required
                         disabled={isSubmitting}
                       />
+                      {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="lastName">Apellido *</Label>
@@ -135,6 +199,7 @@ export function ContactSection() {
                         required
                         disabled={isSubmitting}
                       />
+                      {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
                     </div>
                   </div>
                   
@@ -149,6 +214,7 @@ export function ContactSection() {
                       required
                       disabled={isSubmitting}
                     />
+                    {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                   </div>
                   
                   <div className="space-y-2">
@@ -162,6 +228,7 @@ export function ContactSection() {
                       required
                       disabled={isSubmitting}
                     />
+                    {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
                   </div>
                   
                   <div className="space-y-2">
@@ -191,6 +258,7 @@ export function ContactSection() {
                       <option value="industrial">Industrial</option>
                       <option value="institucional">Institucional</option>
                     </select>
+                    {errors.projectType && <p className="text-red-500 text-sm">{errors.projectType}</p>}
                   </div>
                   
                   <div className="space-y-2">
@@ -204,6 +272,7 @@ export function ContactSection() {
                       required
                       disabled={isSubmitting}
                     />
+                    {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
                   </div>
                   
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
@@ -297,6 +366,7 @@ export function ContactSection() {
           </motion.div>
         </div>
       </div>
+      {showSendingOverlay && <SendingOverlay />}
     </section>
   );
 }

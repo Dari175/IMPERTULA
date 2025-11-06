@@ -22,6 +22,9 @@ import workImage2 from "figma:asset/d0e23da5a30072fe88b0db84b52cea260b878bc6.png
 import workImage3 from "figma:asset/2264f64b61e205723c7629af47513d9f5d16d709.png";
 import cfeRoofImage from "figma:asset/aeb1d84d9aee52d03e808aedad395a193003542b.png";
 import industrialWorkImage from "figma:asset/a52275f45d573bf57d26bfc9847afc77771e9298.png";
+import clientLogos1 from "figma:asset/73dc067b94aee1592966f2298412ef89e11e0e17.png";
+import clientLogos2 from "figma:asset/9727e1a5ff5f50da585351b0312a8953dfcdd69a.png";
+import clientLogos3 from "figma:asset/931f698b4be72bae95d35c906a02a010b7350ced.png";
 
 type View = "home" | "products" | "projects" | "product-detail" | "project-detail" | "admin";
 

@@ -46,16 +46,17 @@ export function Login({ onClose, onLoginSuccess }: LoginProps) {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.2 }}
+        className="w-full max-w-2xl"
       >
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Iniciar Sesión</CardTitle>
-            <CardDescription>
+        <Card className="w-full">
+          <CardHeader className="space-y-3">
+            <CardTitle className="text-3xl">Iniciar Sesión</CardTitle>
+            <CardDescription className="text-base">
               Ingresa tus credenciales para acceder al panel de administración
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
@@ -63,49 +64,49 @@ export function Login({ onClose, onLoginSuccess }: LoginProps) {
                 </Alert>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Correo Electrónico</Label>
+              <div className="space-y-3">
+                <Label htmlFor="email" className="text-base">Correo Electrónico</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="tu@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 h-12 text-base"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
+              <div className="space-y-3">
+                <Label htmlFor="password" className="text-base">Contraseña</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" />
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 h-12 text-base"
                     required
                   />
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-4 pt-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={onClose}
-                  className="flex-1"
+                  className="flex-1 h-12 text-base"
                   disabled={loading}
                 >
                   Cancelar
                 </Button>
-                <Button type="submit" className="flex-1" disabled={loading}>
+                <Button type="submit" className="flex-1 h-12 text-base" disabled={loading}>
                   {loading ? "Iniciando..." : "Iniciar Sesión"}
                 </Button>
               </div>
