@@ -3,7 +3,26 @@ import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 import heroImage from "figma:asset/2264f64b61e205723c7629af47513d9f5d16d709.png";
 import { motion } from "motion/react";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  onViewProducts?: () => void;
+  onContact?: () => void;
+}
+
+export function HeroSection({ onViewProducts, onContact }: HeroSectionProps) {
+  const scrollToProducts = () => {
+    const productsSection = document.getElementById('productos');
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contacto');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="inicio" className="relative min-h-screen flex items-center">
       <div className="absolute inset-0 z-0">
@@ -64,11 +83,16 @@ export function HeroSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.5 }}
           >
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={scrollToProducts}>
               Ver Productos
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-black">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="bg-white text-black border-white hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
+              onClick={scrollToContact}
+            >
               Contactar Ahora
             </Button>
           </motion.div>

@@ -15,6 +15,7 @@ export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: He
   const { user, isAuthenticated, isAdmin } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +45,7 @@ export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: He
         top: offsetPosition,
         behavior: 'smooth'
       });
+      setIsMobileMenuOpen(false); // Cerrar menú móvil al navegar
     }
   };
 
@@ -213,12 +215,63 @@ export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: He
               variant={isScrolled ? "outline" : "secondary"}
               size="sm" 
               className={`lg:hidden ${!isScrolled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : ''}`}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <Menu className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </div>
+
+      {/* Menú móvil */}
+      {isMobileMenuOpen && (
+        <div className="absolute top-20 left-0 right-0 bg-white shadow-lg z-50">
+          <nav className="flex flex-col items-center space-y-4 p-4">
+            <a 
+              href="#inicio" 
+              onClick={(e) => smoothScrollTo(e, '#inicio')}
+              className="transition-colors text-foreground hover:text-primary"
+            >
+              Inicio
+            </a>
+            <a 
+              href="#nosotros" 
+              onClick={(e) => smoothScrollTo(e, '#nosotros')}
+              className="transition-colors text-foreground hover:text-primary"
+            >
+              Nosotros
+            </a>
+            <a 
+              href="#productos" 
+              onClick={(e) => smoothScrollTo(e, '#productos')}
+              className="transition-colors text-foreground hover:text-primary"
+            >
+              Productos
+            </a>
+            <a 
+              href="#trabajos" 
+              onClick={(e) => smoothScrollTo(e, '#trabajos')}
+              className="transition-colors text-foreground hover:text-primary"
+            >
+              Trabajos
+            </a>
+            <a 
+              href="#contacto" 
+              onClick={(e) => smoothScrollTo(e, '#contacto')}
+              className="transition-colors text-foreground hover:text-primary"
+            >
+              Contacto
+            </a>
+            <a 
+              href="#asistencia" 
+              onClick={(e) => smoothScrollTo(e, '#asistencia')}
+              className="transition-colors text-foreground hover:text-primary"
+            >
+              Asistencia
+            </a>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
