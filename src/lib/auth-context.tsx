@@ -46,13 +46,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
+      // Crear un timeout de 10 segundos
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
       const response = await fetch('https://login-api-g0go.onrender.com/api/auth/login', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       const data = await response.json();
 
@@ -73,9 +80,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         return { success: false, error: data.message || "Credenciales incorrectas" };
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error en login:", error);
-      return { success: false, error: "Error al conectar con el servidor" };
+      
+      if (error.name === 'AbortError') {
+        return { success: false, error: "Tiempo de espera agotado. El servidor está tardando demasiado en responder." };
+      }
+      
+      return { success: false, error: "Error al conectar con el servidor. Por favor intenta nuevamente." };
     }
   };
 

@@ -116,20 +116,45 @@ export function WorkSection({ onProjectClick, onViewAll }: WorkSectionProps) {
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Card className="overflow-hidden group hover:shadow-2xl transition-all duration-300 h-full cursor-pointer bg-white/80 backdrop-blur-sm">
+                <Card className="overflow-hidden group hover:shadow-2xl h-full cursor-pointer bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/15 transition-all duration-300">
                   <div className="relative" onClick={() => onProjectClick?.(project._id || project.id || "")}>
                     <AspectRatio ratio={16/10}>
                       {getPrincipalImageUrl(project) ? (
                         <img
                           src={getPrincipalImageUrl(project)!}
                           alt={project.titulo}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center gap-3">
-                          <Wrench className="h-12 w-12 text-gray-400 animate-pulse" />
-                          <span className="text-gray-500 font-medium">En Mantenimiento</span>
-                          <span className="text-xs text-gray-400 px-4 text-center">Próximamente agregaremos imágenes de este proyecto</span>
+                        <div className="w-full h-full relative">
+                          <img
+                            src="https://images.unsplash.com/photo-1723474123029-98ec22febbeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb25zdHJ1Y3Rpb24lMjBtYWludGVuYW5jZSUyMHRvb2xzfGVufDF8fHx8MTc2MjQwNzM2M3ww&ixlib=rb-4.1.0&q=80&w=1080"
+                            alt="En mantenimiento"
+                            className="w-full h-full object-cover opacity-30"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/40 to-[#003366]/60 flex flex-col items-center justify-center gap-4 p-6">
+                            <motion.div
+                              animate={{
+                                rotate: [0, 10, -10, 0],
+                                scale: [1, 1.1, 1],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              }}
+                            >
+                              <Wrench className="h-16 w-16 text-white drop-shadow-lg" />
+                            </motion.div>
+                            <div className="text-center space-y-2">
+                              <h4 className="text-white font-bold text-xl drop-shadow-md">
+                                Galería en Construcción
+                              </h4>
+                              <p className="text-white/90 text-sm drop-shadow-sm">
+                                Próximamente agregaremos<br />imágenes de este proyecto
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </AspectRatio>
@@ -153,24 +178,24 @@ export function WorkSection({ onProjectClick, onViewAll }: WorkSectionProps) {
                   </div>
                   
                   <CardContent className="p-5">
-                    <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-1">
+                    <h3 className="font-bold text-lg mb-2 transition-colors duration-300 group-hover:text-primary line-clamp-1 text-white">
                       {project.titulo}
                     </h3>
                     
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    <p className="text-sm text-white/80 mb-4 line-clamp-2">
                       {project.descripcionCorta || project.descripcion}
                     </p>
                     
                     <div className="space-y-2 text-sm">
                       {project.ubicacion && (
-                        <div className="flex items-center gap-2 text-muted-foreground">
+                        <div className="flex items-center gap-2 text-white/70">
                           <MapPin className="h-4 w-4 shrink-0" />
                           <span className="line-clamp-1">{project.ubicacion}</span>
                         </div>
                       )}
                       
                       {(project.fechaFinalizacion || project.fecha) && (
-                        <div className="flex items-center gap-2 text-muted-foreground">
+                        <div className="flex items-center gap-2 text-white/70">
                           <Calendar className="h-4 w-4 shrink-0" />
                           <span>{project.fecha || new Date(project.fechaFinalizacion).toLocaleDateString('es-MX', { year: 'numeric', month: 'long' })}</span>
                         </div>
@@ -179,11 +204,11 @@ export function WorkSection({ onProjectClick, onViewAll }: WorkSectionProps) {
                     
                     <Button 
                       variant="ghost" 
-                      className="w-full mt-4 group-hover:bg-primary group-hover:text-white transition-colors"
+                      className="w-full mt-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300"
                       onClick={() => onProjectClick?.(project._id || project.id || "")}
                     >
                       Ver Detalles
-                      <ArrowRight className="h-4 w-4 ml-2" />
+                      <ArrowRight className="h-4 w-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                     </Button>
                   </CardContent>
                 </Card>

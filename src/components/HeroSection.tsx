@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { ArrowRight, Shield, CheckCircle } from "lucide-react";
+import { ArrowRight, Shield, CheckCircle, ChevronDown } from "lucide-react";
 import heroImage from "figma:asset/2264f64b61e205723c7629af47513d9f5d16d709.png";
 import { motion } from "motion/react";
 
@@ -119,6 +119,34 @@ export function HeroSection({ onViewProducts, onContact }: HeroSectionProps) {
           </motion.div>
         </motion.div>
       </div>
+      
+      {/* Scroll Indicator */}
+      <motion.div 
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center cursor-pointer"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 0.8 }}
+        onClick={() => {
+          const aboutSection = document.getElementById('nosotros');
+          if (aboutSection) {
+            aboutSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }}
+      >
+        <motion.p 
+          className="text-white text-sm mb-2 font-medium"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Desliza hacia abajo
+        </motion.p>
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown className="h-8 w-8 text-blue-400" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

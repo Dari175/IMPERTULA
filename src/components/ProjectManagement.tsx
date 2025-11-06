@@ -386,12 +386,13 @@ export function ProjectManagement() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="fecha">Fecha</Label>
+                <Label htmlFor="fecha">Fecha (Ejemplo: Junio 2024)</Label>
                 <Input
                   id="fecha"
-                  type="date"
+                  type="text"
                   value={(formData as any).fecha || ""}
                   onChange={(e) => updateField("fecha", e.target.value)}
+                  placeholder="Ej: Junio 2024, Enero 2023, etc."
                 />
               </div>
 
