@@ -1,18 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "./ui/button";
+import { ArrowRight, ChevronLeft, ChevronRight, MapPin, Calendar, CheckCircle, Clock, Wrench } from "lucide-react";
+import { motion, useScroll, useTransform, useSpring } from "motion/react";
+import { projectApi, Project, ProjectImage } from "../lib/api";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { AspectRatio } from "./ui/aspect-ratio";
-import {
-  ArrowRight,
-  MapPin,
-  Calendar,
-  CheckCircle,
-  Clock,
-  Wrench,
-} from "lucide-react";
-import { motion, useScroll, useTransform } from "motion/react";
-import { projectApi, Project, ProjectImage } from "../lib/api";
 import backgroundImage from "figma:asset/d3d678ed3de5d7c79f508ad5d7b35231f3202b61.png";
 
 interface WorkSectionProps {
@@ -322,8 +315,17 @@ export function WorkSection({
   const backgroundY = useTransform(
     scrollYProgress,
     [0, 1],
-    ["-40%", "40%"],
+    ["-8%", "8%"],
   );
+
+  // Aplicar spring para suavizar el movimiento del parallax
+  const smoothBackgroundY = useSpring(backgroundY, {
+    stiffness: 50,
+    damping: 40,
+    mass: 1,
+    restDelta: 0.001,
+    restSpeed: 0.001
+  });
 
   // Calcular estadísticas dinámicas basadas en proyectos
   const stats = {
@@ -406,13 +408,22 @@ export function WorkSection({
       {/* Imagen de fondo con overlay y efecto parallax */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div
-          className="absolute inset-0 w-full h-full"
-          style={{ y: backgroundY }}
+          className="absolute inset-0 w-full h-full will-change-transform"
+          style={{ 
+            y: smoothBackgroundY,
+            willChange: "transform"
+          }}
         >
           <img
             src={backgroundImage}
             alt="Proyecto de impermeabilización"
-            className="w-full h-full object-cover scale-150"
+            className="w-full h-full object-cover scale-125"
+            style={{
+              transform: "translateZ(0) translateY(-10%)",
+              backfaceVisibility: "hidden",
+              perspective: 1000,
+              objectPosition: "center 40%"
+            }}
           />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
