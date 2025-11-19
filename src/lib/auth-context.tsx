@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const response = await fetch('https://login-api-g0go.onrender.com/api/auth/login', { 
+      const response = await fetch('https://login-api-f245.onrender.com/api/auth/login', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

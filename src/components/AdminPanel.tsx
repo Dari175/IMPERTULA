@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { ProductManagement } from "./ProductManagement";
-import { ProjectManagement } from "./ProjectManagement";
+import { ProductManagement } from "./admin/ProductManagement";
+import { ProjectManagement } from "./admin/ProjectManagement";
 import { ArrowLeft, Package, Briefcase, Settings } from "lucide-react";
 import { motion } from "motion/react";
 

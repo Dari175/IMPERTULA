@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner@2.0.3";
 import { SendingOverlay } from "./SendingOverlay";
 
-const API_URL = "https://contactapi-850i.onrender.com/api/contact";
+const API_URL = "https://contactapi-5qan.onrender.com/api/contact";
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -31,10 +31,15 @@ export function ContactSection() {
   };
 
   const validatePhone = (phone: string): boolean => {
-    // Permite números con espacios, guiones, paréntesis y el símbolo +
-    const phoneRegex = /^[\d\s\-\+\(\)]+$/;
-    const digitsOnly = phone.replace(/\D/g, '');
-    return phoneRegex.test(phone) && digitsOnly.length >= 10;
+    // Solo permite exactamente 10 dígitos numéricos
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const validateName = (name: string): boolean => {
+    // Solo permite letras, espacios, acentos y caracteres comunes en nombres españoles
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    return nameRegex.test(name) && name.trim().length >= 2;
   };
 
   const validateForm = (): boolean => {
@@ -42,14 +47,14 @@ export function ContactSection() {
 
     if (!formData.name.trim()) {
       newErrors.name = "El nombre es obligatorio";
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = "El nombre debe tener al menos 2 caracteres";
+    } else if (!validateName(formData.name)) {
+      newErrors.name = "El nombre solo puede contener letras y espacios";
     }
 
     if (!formData.lastName.trim()) {
       newErrors.lastName = "El apellido es obligatorio";
-    } else if (formData.lastName.trim().length < 2) {
-      newErrors.lastName = "El apellido debe tener al menos 2 caracteres";
+    } else if (!validateName(formData.lastName)) {
+      newErrors.lastName = "El apellido solo puede contener letras y espacios";
     }
 
     if (!formData.email.trim()) {
@@ -61,7 +66,7 @@ export function ContactSection() {
     if (!formData.phone.trim()) {
       newErrors.phone = "El teléfono es obligatorio";
     } else if (!validatePhone(formData.phone)) {
-      newErrors.phone = "Por favor ingresa un número de teléfono válido (mínimo 10 dígitos)";
+      newErrors.phone = "El teléfono debe contener exactamente 10 dígitos";
     }
 
     if (!formData.projectType) {
@@ -72,6 +77,8 @@ export function ContactSection() {
       newErrors.message = "El mensaje es obligatorio";
     } else if (formData.message.trim().length < 10) {
       newErrors.message = "El mensaje debe tener al menos 10 caracteres";
+    } else if (formData.message.trim().length > 500) {
+      newErrors.message = "El mensaje no puede exceder 500 caracteres";
     }
 
     setErrors(newErrors);
@@ -80,10 +87,35 @@ export function ContactSection() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+    
+    // Validación específica para el campo de teléfono
+    if (id === "phone") {
+      // Solo permite números y limita a 10 caracteres
+      const numericValue = value.replace(/\D/g, '').slice(0, 10);
+      setFormData((prev) => ({
+        ...prev,
+        [id]: numericValue,
+      }));
+    } else if (id === "name" || id === "lastName") {
+      // Solo permite letras, espacios y acentos para nombre y apellido
+      const alphaValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '').slice(0, 50);
+      setFormData((prev) => ({
+        ...prev,
+        [id]: alphaValue,
+      }));
+    } else if (id === "message") {
+      // Limita el mensaje a 500 caracteres
+      setFormData((prev) => ({
+        ...prev,
+        [id]: value.slice(0, 500),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: value,
+      }));
+    }
+    
     // Limpiar error del campo al escribir
     if (errors[id]) {
       setErrors((prev) => {
@@ -272,7 +304,12 @@ export function ContactSection() {
                       required
                       disabled={isSubmitting}
                     />
-                    {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
+                    <div className="flex justify-between items-center">
+                      {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
+                      <p className={`text-xs ${formData.message.length > 450 ? 'text-orange-500' : 'text-muted-foreground'} ml-auto`}>
+                        {formData.message.length}/500 caracteres
+                      </p>
+                    </div>
                   </div>
                   
                   <Button type="submit" className="w-full" disabled={isSubmitting}>

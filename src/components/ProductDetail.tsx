@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { ArrowLeft, Star, Package, Shield, Droplets, Clock, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Star, Package, Shield, Droplets, Clock, CheckCircle2, FileText, MessageCircle } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { motion } from "motion/react";
 import { productApi, Product } from "../lib/api";
@@ -15,6 +15,7 @@ interface ProductDetailProps {
 export function ProductDetail({ productId, onBack }: ProductDetailProps) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showTechnicalSheet, setShowTechnicalSheet] = useState(false);
 
   useEffect(() => {
     loadProduct();
@@ -30,6 +31,26 @@ export function ProductDetail({ productId, onBack }: ProductDetailProps) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRequestQuote = () => {
+    const whatsappNumber = "5217731335692";
+    const message = encodeURIComponent(
+      `Hola, me interesa solicitar una cotización para el producto: ${product?.name || 'producto'}`
+    );
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+  };
+
+  const handleTechnicalSheet = () => {
+    setShowTechnicalSheet(!showTechnicalSheet);
+  };
+
+  const handleContactSpecialist = () => {
+    const whatsappNumber = "5217731246119"; // Número de soporte técnico
+    const message = encodeURIComponent(
+      `Hola, necesito asesoría técnica sobre el producto: ${product?.name || 'producto'}`
+    );
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
   };
 
   if (loading) {
@@ -194,15 +215,92 @@ export function ProductDetail({ productId, onBack }: ProductDetailProps) {
             )}
 
             <div className="flex gap-4">
-              <Button size="lg" className="flex-1">
+              <Button size="lg" className="flex-1" onClick={handleRequestQuote}>
+                <MessageCircle className="mr-2 h-4 w-4" />
                 Solicitar Cotización
               </Button>
-              <Button size="lg" variant="outline" className="flex-1">
+              <Button size="lg" variant="outline" className="flex-1" onClick={handleTechnicalSheet}>
+                <FileText className="mr-2 h-4 w-4" />
                 Ficha Técnica
               </Button>
             </div>
           </motion.div>
         </div>
+
+        {/* Ficha Técnica expandible */}
+        {showTechnicalSheet && product?.specifications && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="mb-8"
+          >
+            <Card className="border-blue-200 bg-blue-50">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-xl flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-blue-600" />
+                    Ficha Técnica Completa
+                  </h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-lg">
+                  <div>
+                    <h4 className="font-medium mb-2 text-blue-600">Información del Producto</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between py-1 border-b">
+                        <span className="text-muted-foreground">Nombre:</span>
+                        <span className="font-medium">{product.name}</span>
+                      </div>
+                      <div className="flex justify-between py-1 border-b">
+                        <span className="text-muted-foreground">Marca:</span>
+                        <span className="font-medium">{product.brand}</span>
+                      </div>
+                      <div className="flex justify-between py-1 border-b">
+                        <span className="text-muted-foreground">Categoría:</span>
+                        <span className="font-medium">{product.category}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-2 text-blue-600">Especificaciones Técnicas</h4>
+                    <div className="space-y-2 text-sm">
+                      {product.specifications.presentation && (
+                        <div className="flex justify-between py-1 border-b">
+                          <span className="text-muted-foreground">Presentación:</span>
+                          <span className="font-medium">{product.specifications.presentation}</span>
+                        </div>
+                      )}
+                      {product.specifications.coverage && (
+                        <div className="flex justify-between py-1 border-b">
+                          <span className="text-muted-foreground">Rendimiento:</span>
+                          <span className="font-medium">{product.specifications.coverage}</span>
+                        </div>
+                      )}
+                      {product.specifications.dryingTime && (
+                        <div className="flex justify-between py-1 border-b">
+                          <span className="text-muted-foreground">Tiempo de secado:</span>
+                          <span className="font-medium">{product.specifications.dryingTime}</span>
+                        </div>
+                      )}
+                      {product.specifications.colors && (
+                        <div className="flex justify-between py-1 border-b">
+                          <span className="text-muted-foreground">Colores:</span>
+                          <span className="font-medium">{product.specifications.colors}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {product.fullDescription && (
+                  <div className="mt-4 bg-white p-4 rounded-lg">
+                    <h4 className="font-medium mb-2 text-blue-600">Descripción Completa</h4>
+                    <p className="text-sm text-muted-foreground">{product.fullDescription}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Características y aplicaciones */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -276,7 +374,10 @@ export function ProductDetail({ productId, onBack }: ProductDetailProps) {
                     Nuestro equipo de expertos está disponible para ayudarte a elegir el producto adecuado 
                     y resolver cualquier duda técnica sobre la aplicación.
                   </p>
-                  <Button>Contactar a un Especialista</Button>
+                  <Button onClick={handleContactSpecialist}>
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Contactar a un Especialista
+                  </Button>
                 </div>
               </div>
             </CardContent>

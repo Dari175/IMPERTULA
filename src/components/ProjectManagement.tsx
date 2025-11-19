@@ -193,6 +193,18 @@ export function ProjectManagement() {
   };
 
   const handleCancel = () => {
+    // Verificar si hay cambios sin guardar
+    const hasUnsavedChanges = 
+      (isCreating || editingId) && 
+      (formData.titulo || formData.descripcionCorta || formData.imagenes?.length);
+
+    if (hasUnsavedChanges) {
+      const confirmCancel = confirm(
+        "¿Estás seguro de que deseas descartar los cambios? Todos los datos no guardados se perderán."
+      );
+      if (!confirmCancel) return;
+    }
+
     setIsCreating(false);
     setEditingId(null);
     setFormData({});

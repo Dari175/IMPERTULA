@@ -77,14 +77,23 @@ export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: He
       
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-6">
             <img 
               src={impertulaLogo}
               alt="IMPERTULA Logo"
-              className="h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              className="h-12 md:h-14 w-auto object-contain cursor-pointer hover:opacity-80 transition-opacity"
               onClick={onLogoClick}
             />
-            <div className={`hidden md:flex items-center space-x-1 text-sm transition-colors ${
+            {/* Distribuidor autorizado - visible en móvil al lado del logo */}
+            <div className={`flex md:hidden items-center space-x-0.5 text-xs transition-colors ${
+              isScrolled ? 'text-muted-foreground' : 'text-white/90'
+            }`}>
+              <span className={`font-semibold ${isScrolled ? 'text-primary' : 'text-white'}`}>FESTER</span>
+              <span>&</span>
+              <span className={`font-semibold ${isScrolled ? 'text-primary' : 'text-white'}`}>HENKEL</span>
+            </div>
+            {/* Distribuidor autorizado - versión completa para desktop */}
+            <div className={`hidden lg:flex items-center space-x-1 text-base transition-colors ${
               isScrolled ? 'text-muted-foreground' : 'text-white/90'
             }`}>
               <span>Distribuidor autorizado</span>
@@ -92,9 +101,17 @@ export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: He
               <span>&</span>
               <span className={`font-semibold ${isScrolled ? 'text-primary' : 'text-white'}`}>HENKEL</span>
             </div>
+            {/* Distribuidor autorizado - versión compacta para tablet */}
+            <div className={`hidden md:flex lg:hidden items-center space-x-0.5 text-sm transition-colors ${
+              isScrolled ? 'text-muted-foreground' : 'text-white/90'
+            }`}>
+              <span className={`font-semibold ${isScrolled ? 'text-primary' : 'text-white'}`}>FESTER</span>
+              <span>&</span>
+              <span className={`font-semibold ${isScrolled ? 'text-primary' : 'text-white'}`}>HENKEL</span>
+            </div>
           </div>
           
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
             <a 
               href="#inicio" 
               onClick={(e) => smoothScrollTo(e, '#inicio')}
@@ -171,7 +188,7 @@ export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: He
               <span>Impertula@hotmail.com</span>
             </div>
             
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <div className="flex items-center gap-2">
                 <span className={`text-sm hidden md:inline ${
                   isScrolled ? 'text-muted-foreground' : 'text-white/90'
@@ -199,16 +216,6 @@ export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: He
                   <span className="hidden md:inline">Salir</span>
                 </Button>
               </div>
-            ) : (
-              <Button 
-                variant={isScrolled ? "outline" : "secondary"}
-                size="sm"
-                onClick={onLoginClick}
-                className={`gap-1 ${!isScrolled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : ''}`}
-              >
-                <User className="h-4 w-4" />
-                <span className="hidden md:inline">Iniciar Sesión</span>
-              </Button>
             )}
             
             <Button 
@@ -226,6 +233,15 @@ export function Header({ onLogoClick, onLoginClick, onAdminClick, onLogout }: He
       {/* Menú móvil */}
       {isMobileMenuOpen && (
         <div className="absolute top-20 left-0 right-0 bg-white shadow-lg z-50">
+          {/* Badge Distribuidor Autorizado en móvil */}
+          <div className="bg-gradient-to-r from-blue-50 to-green-50 py-2 px-4 text-center border-b">
+            <div className="flex items-center justify-center space-x-1 text-xs text-muted-foreground">
+              <span>Distribuidor autorizado</span>
+              <span className="font-semibold text-primary">FESTER</span>
+              <span>&</span>
+              <span className="font-semibold text-green-600">HENKEL</span>
+            </div>
+          </div>
           <nav className="flex flex-col items-center space-y-4 p-4">
             <a 
               href="#inicio" 

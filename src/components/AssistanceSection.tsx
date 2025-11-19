@@ -45,8 +45,8 @@ const services = [
 const supportChannels = [
   {
     icon: Phone,
-    title: "Especialista Principal",
-    description: "Contacto directo con especialista",
+    title: "Ing. Oscar Darinel Aguilar Guerrero",
+    description: "Especialista Principal",
     contact: "+52 1 773 133 5692",
     hours: "Lun-Vie 8:00-18:00",
     status: "Disponible",
@@ -54,8 +54,8 @@ const supportChannels = [
   },
   {
     icon: MessageCircle,
-    title: "Soporte Técnico",
-    description: "Asesoría técnica por WhatsApp",
+    title: "Tec. Oscar Lugo",
+    description: "Soporte Técnico",
     contact: "+52 1 773 124 6119",
     hours: "Lun-Vie 9:00-17:00",
     status: "En Línea",
@@ -63,33 +63,33 @@ const supportChannels = [
   },
   {
     icon: Calendar,
-    title: "Visita Técnica",
-    description: "Inspección y asesoría en sitio",
-    contact: "Agenda tu cita",
-    hours: "Por cita",
-    status: "Programable",
-    whatsapp: "5217731335692"
+    title: "Adamaris Lugo",
+    description: "Asesor de Ventas",
+    contact: "+52 1 773 124 6119",
+    hours: "Lun-Vie 9:00-18:00",
+    status: "Disponible",
+    whatsapp: "5217731246119"
   }
 ];
 
 const specialists = [
   {
-    name: "Ing. Carlos Mendoza",
-    specialty: "Impermeabilización Industrial",
-    experience: "12 años",
-    certifications: ["Fester Certified", "Henkel Expert"]
+    name: "Ing. Oscar Darinel Aguilar Guerrero",
+    specialty: "Especialista Principal",
+    experience: "27 años",
+    certifications: ["Fester Certified", "Henkel Expert", "Impermeabilización Industrial"]
   },
   {
-    name: "Arq. Ana Rodríguez",
-    specialty: "Proyectos Residenciales",
-    experience: "8 años",
-    certifications: ["Especialista en Azoteas", "Fester Pro"]
+    name: "Tec. Oscar Lugo",
+    specialty: "Soporte Técnico",
+    experience: "9 años",
+    certifications: ["DC-3", "Trabajos en Alturas", "Fester", "Henkel"]
   },
   {
-    name: "Ing. Roberto Silva",
-    specialty: "Aditivos para Concreto",
-    experience: "15 años",
-    certifications: ["Henkel Master", "Especialista Químico"]
+    name: "Adamaris Lugo",
+    specialty: "Asesor de Ventas",
+    experience: "5 años",
+    certifications: ["Fester", "Henkel"]
   }
 ];
 

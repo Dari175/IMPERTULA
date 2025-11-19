@@ -1,11 +1,20 @@
 // API centralizada para productos y proyectos
 // Conecta con los endpoints reales de Impertula
+// Con fallback a datos mock si las APIs no están disponibles
+
+import { 
+  productsData as mockProducts, 
+  projectsData as mockProjects 
+} from './mock-data';
 
 const API_URLS = {
-  products: 'https://product-api-bt4l.onrender.com/api/products',
+  products: 'https://product-api-trzk.onrender.com/api/products',
   projects: 'https://apiproyects-qogl.onrender.com/api/proyectos',
-  login: 'https://login-api-g0go.onrender.com/api/auth/login'
+  login: 'https://login-api-f245.onrender.com/api/auth/login'
 };
+
+// Flag para controlar si usar API real o mock
+const USE_MOCK_DATA = false; // APIs reales activas
 
 // Interfaces según la estructura de la API
 export interface Product {
@@ -79,15 +88,29 @@ const getAuthToken = (): string | null => {
 export const productApi = {
   // GET /api/products - Listar todos los productos
   getAll: async (): Promise<Product[]> => {
+    if (USE_MOCK_DATA) {
+      return mockProducts;
+    }
     try {
-      const response = await fetch(API_URLS.products);
+      console.log('🔄 Intentando cargar productos desde API:', API_URLS.products);
+      const response = await fetch(API_URLS.products, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        cache: 'no-cache',
+      });
+      
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Error response:', errorText);
-        throw new Error('Error al obtener productos');
+        console.error('❌ Error response:', response.status, errorText);
+        throw new Error(`Error ${response.status}: ${errorText}`);
       }
+      
       const data = await response.json();
-      console.log('Products API response:', data);
+      console.log('✅ Products API response:', data);
       
       // Si la respuesta es un array, devolverlo directamente
       if (Array.isArray(data)) {
@@ -101,25 +124,46 @@ export const productApi = {
       
       return [];
     } catch (error) {
-      console.error('Error en productApi.getAll:', error);
-      throw error;
+      console.error('❌ Error en productApi.getAll:', error);
+      console.warn('⚠️ Usando datos mock como fallback');
+      // Fallback a datos mock si la API falla
+      return mockProducts;
     }
   },
 
   // GET /api/products/:id - Obtener producto por ID
   getById: async (id: string): Promise<Product> => {
+    if (USE_MOCK_DATA) {
+      const product = mockProducts.find(p => p._id === id);
+      if (!product) throw new Error('Producto no encontrado');
+      return product;
+    }
     try {
-      const response = await fetch(`${API_URLS.products}/${id}`);
+      console.log('🔄 Cargando producto:', id);
+      const response = await fetch(`${API_URLS.products}/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        cache: 'no-cache',
+      });
+      
       if (!response.ok) throw new Error('Error al obtener producto');
       const result = await response.json();
-      console.log('Product detail API response:', result);
+      console.log('✅ Product detail API response:', result);
       
       // La API devuelve { success: true, data: {...} }
       // Extraemos solo la propiedad data
       return result.data || result;
     } catch (error) {
-      console.error('Error en productApi.getById:', error);
-      throw error;
+      console.error('❌ Error en productApi.getById:', error);
+      console.warn('⚠️ Usando datos mock como fallback');
+      // Fallback a datos mock
+      const product = mockProducts.find(p => p._id === id);
+      if (!product) throw new Error('Producto no encontrado');
+      return product;
     }
   },
 
@@ -235,15 +279,29 @@ export const productApi = {
 export const projectApi = {
   // GET /api/proyectos - Obtener todos los proyectos
   getAll: async (): Promise<Project[]> => {
+    if (USE_MOCK_DATA) {
+      return mockProjects;
+    }
     try {
-      const response = await fetch(API_URLS.projects);
+      console.log('🔄 Intentando cargar proyectos desde API:', API_URLS.projects);
+      const response = await fetch(API_URLS.projects, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        cache: 'no-cache',
+      });
+      
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Error response:', errorText);
-        throw new Error('Error al obtener proyectos');
+        console.error('❌ Error response:', response.status, errorText);
+        throw new Error(`Error ${response.status}: ${errorText}`);
       }
+      
       const data = await response.json();
-      console.log('Projects API response:', data);
+      console.log('✅ Projects API response:', data);
       
       // Si la respuesta es un array, devolverlo directamente
       if (Array.isArray(data)) {
@@ -257,25 +315,46 @@ export const projectApi = {
       
       return [];
     } catch (error) {
-      console.error('Error en projectApi.getAll:', error);
-      throw error;
+      console.error('❌ Error en projectApi.getAll:', error);
+      console.warn('⚠️ Usando datos mock como fallback');
+      // Fallback a datos mock si la API falla
+      return mockProjects;
     }
   },
 
   // GET /api/proyectos/:id - Obtener un proyecto por ID
   getById: async (id: string): Promise<Project> => {
+    if (USE_MOCK_DATA) {
+      const project = mockProjects.find(p => p._id === id);
+      if (!project) throw new Error('Proyecto no encontrado');
+      return project;
+    }
     try {
-      const response = await fetch(`${API_URLS.projects}/${id}`);
+      console.log('🔄 Cargando proyecto:', id);
+      const response = await fetch(`${API_URLS.projects}/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        cache: 'no-cache',
+      });
+      
       if (!response.ok) throw new Error('Error al obtener proyecto');
       const result = await response.json();
-      console.log('Project detail API response:', result);
+      console.log('✅ Project detail API response:', result);
       
       // La API devuelve { success: true, data: {...} }
       // Extraemos solo la propiedad data
       return result.data || result;
     } catch (error) {
-      console.error('Error en projectApi.getById:', error);
-      throw error;
+      console.error('❌ Error en projectApi.getById:', error);
+      console.warn('⚠️ Usando datos mock como fallback');
+      // Fallback a datos mock
+      const project = mockProjects.find(p => p._id === id);
+      if (!project) throw new Error('Proyecto no encontrado');
+      return project;
     }
   },
 

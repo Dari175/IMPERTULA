@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { ArrowLeft, MapPin, Calendar, CheckCircle, Users, Ruler, Clock, Award, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, CheckCircle, Users, Ruler, Clock, Award, Image as ImageIcon, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { projectApi, Project, ProjectImage } from "../lib/api";
 
@@ -55,6 +55,14 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRequestQuote = () => {
+    const whatsappNumber = "5217731335692";
+    const message = encodeURIComponent(
+      `Hola, me interesa solicitar una cotización para un proyecto similar a: ${project?.titulo || 'su proyecto'}`
+    );
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
   };
 
   if (loading) {
@@ -334,7 +342,10 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
                 <p className="text-sm text-muted-foreground mb-4">
                   Podemos ayudarte a lograr resultados excepcionales como este.
                 </p>
-                <Button className="w-full">Solicitar Cotización</Button>
+                <Button className="w-full" onClick={handleRequestQuote}>
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  Solicitar Cotización
+                </Button>
               </CardContent>
             </Card>
           </motion.div>

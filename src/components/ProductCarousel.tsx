@@ -1,19 +1,25 @@
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
-import { ArrowRight, Star } from "lucide-react";
+import { Star, ChevronRight } from "lucide-react";
+import { Product, productApi } from "../lib/api";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { motion } from "motion/react";
-import { productApi, Product } from "../lib/api";
-import Autoplay from "embla-carousel-autoplay@8.6.0";
 
 interface ProductCarouselProps {
-  onProductClick?: (productId: string) => void;
   onViewAll?: () => void;
+  onProductClick?: (productId: string) => void;
 }
 
-export function ProductCarousel({ onProductClick, onViewAll }: ProductCarouselProps) {
+export function ProductCarousel({ onViewAll, onProductClick }: ProductCarouselProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,16 +31,7 @@ export function ProductCarousel({ onProductClick, onViewAll }: ProductCarouselPr
     setLoading(true);
     try {
       const data = await productApi.getAll();
-      // Asegurarse de que data sea un array
-      if (Array.isArray(data)) {
-        setProducts(data);
-      } else if (data && typeof data === 'object') {
-        // Si la API devuelve {data: [...]} o similar
-        const productsArray = (data as any).data || (data as any).products || [];
-        setProducts(Array.isArray(productsArray) ? productsArray : []);
-      } else {
-        setProducts([]);
-      }
+      setProducts(data);
     } catch (error) {
       console.error("Error loading products:", error);
       setProducts([]);
@@ -162,7 +159,7 @@ export function ProductCarousel({ onProductClick, onViewAll }: ProductCarouselPr
         >
           <Button size="lg" onClick={onViewAll}>
             Ver Todos los Productos
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ChevronRight className="ml-2 h-5 w-5" />
           </Button>
         </motion.div>
       </div>
