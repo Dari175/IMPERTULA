@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ArrowLeft, MapPin, Calendar, CheckCircle, Users, Ruler, Clock, Award, Image as ImageIcon, MessageCircle } from "lucide-react";
+import { ImageZoom } from "./ImageZoom";
 import { motion } from "motion/react";
 import { projectApi, Project, ProjectImage } from "../lib/api";
 
@@ -121,10 +122,11 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         >
           <Button
             onClick={onBack}
+            size="lg"
             variant="outline"
-            className="gap-2"
+            className="gap-2 shadow-md hover:shadow-lg transition-all"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5" />
             Volver a Proyectos
           </Button>
         </motion.div>
@@ -137,59 +139,61 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
           className="mb-8"
         >
           <Card className="overflow-hidden">
-            <div className="relative h-96">
-              {getPrincipalImageUrl(project) ? (
-                <img
+            {getPrincipalImageUrl(project) ? (
+              <div className="relative h-96">
+                <ImageZoom
                   src={getPrincipalImageUrl(project)!}
                   alt={project.titulo || 'Proyecto'}
-                  className="w-full h-full object-cover"
+                  className="w-full h-96"
                 />
-              ) : (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
+                <div className="absolute bottom-0 left-0 right-0 p-8 text-white pointer-events-none">
+                  <div className="flex items-center gap-3 mb-4">
+                    {project.estado && (
+                      <Badge 
+                        variant={project.estado === "Completado" ? "default" : "secondary"}
+                        className="bg-white/90 text-primary hover:bg-white"
+                      >
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        {project.estado}
+                      </Badge>
+                    )}
+                    {project.categoria && (
+                      <Badge variant="outline" className="bg-white/20 text-white border-white/30">
+                        {project.categoria}
+                      </Badge>
+                    )}
+                  </div>
+                  <h1 className="text-4xl font-bold mb-4">{project.titulo || 'Proyecto'}</h1>
+                  <div className="flex flex-wrap items-center gap-6 text-white/90">
+                    {project.ubicacion && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        <span>{project.ubicacion}</span>
+                      </div>
+                    )}
+                    {project.fecha && (
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        <span>{project.fecha}</span>
+                      </div>
+                    )}
+                    {project.area && (
+                      <div className="flex items-center gap-2">
+                        <Ruler className="h-4 w-4" />
+                        <span>{project.area}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="relative h-96">
                 <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                   <ImageIcon className="h-16 w-16 text-gray-400" />
                 </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                <div className="flex items-center gap-3 mb-4">
-                  {project.estado && (
-                    <Badge 
-                      variant={project.estado === "Completado" ? "default" : "secondary"}
-                      className="bg-white/90 text-primary hover:bg-white"
-                    >
-                      <CheckCircle className="h-3 w-3 mr-1" />
-                      {project.estado}
-                    </Badge>
-                  )}
-                  {project.categoria && (
-                    <Badge variant="outline" className="bg-white/20 text-white border-white/30">
-                      {project.categoria}
-                    </Badge>
-                  )}
-                </div>
-                <h1 className="text-4xl font-bold mb-4">{project.titulo || 'Proyecto'}</h1>
-                <div className="flex flex-wrap items-center gap-6 text-white/90">
-                  {project.ubicacion && (
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4" />
-                      <span>{project.ubicacion}</span>
-                    </div>
-                  )}
-                  {project.fecha && (
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      <span>{project.fecha}</span>
-                    </div>
-                  )}
-                  {project.area && (
-                    <div className="flex items-center gap-2">
-                      <Ruler className="h-4 w-4" />
-                      <span>{project.area}</span>
-                    </div>
-                  )}
-                </div>
               </div>
-            </div>
+            )}
           </Card>
         </motion.div>
 

@@ -4,6 +4,7 @@ import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ArrowLeft, Star, Package, Shield, Droplets, Clock, CheckCircle2, FileText, MessageCircle } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageZoom } from "./ImageZoom";
 import { motion } from "motion/react";
 import { productApi, Product } from "../lib/api";
 
@@ -46,7 +47,7 @@ export function ProductDetail({ productId, onBack }: ProductDetailProps) {
   };
 
   const handleContactSpecialist = () => {
-    const whatsappNumber = "5217731246119"; // Número de soporte técnico
+    const whatsappNumber = "5217731246119";
     const message = encodeURIComponent(
       `Hola, necesito asesoría técnica sobre el producto: ${product?.name || 'producto'}`
     );
@@ -68,9 +69,9 @@ export function ProductDetail({ productId, onBack }: ProductDetailProps) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl mb-4">Producto no encontrado</h2>
-          <Button onClick={onBack}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Volver
+          <Button onClick={onBack} size="lg" className="gap-2">
+            <ArrowLeft className="h-5 w-5" />
+            Volver a Productos
           </Button>
         </div>
       </div>
@@ -95,16 +96,17 @@ export function ProductDetail({ productId, onBack }: ProductDetailProps) {
         >
           <Button
             onClick={onBack}
+            size="lg"
             variant="outline"
-            className="gap-2"
+            className="gap-2 shadow-md hover:shadow-lg transition-all"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5" />
             Volver a Productos
           </Button>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Imagen del producto */}
+          {/* Imagen del producto con zoom */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -112,16 +114,16 @@ export function ProductDetail({ productId, onBack }: ProductDetailProps) {
           >
             <Card className="overflow-hidden">
               {product.image && typeof product.image === 'string' && product.image.startsWith('http') ? (
-                <ImageWithFallback
+                <ImageZoom
                   src={product.image}
                   alt={product.name || 'Producto'}
-                  className="w-full h-96 object-cover"
+                  className="w-full h-96"
                 />
               ) : product.image && typeof product.image === 'string' ? (
-                <img
+                <ImageZoom
                   src={product.image}
                   alt={product.name || 'Producto'}
-                  className="w-full h-96 object-cover"
+                  className="w-full h-96"
                 />
               ) : (
                 <div className="w-full h-96 bg-gray-200 flex items-center justify-center">

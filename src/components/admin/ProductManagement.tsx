@@ -170,8 +170,13 @@ export function ProductManagement() {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      setImagePreview(URL.createObjectURL(file));
-      updateField("image", file.name);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setImagePreview(base64String);
+        updateField("image", base64String);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
